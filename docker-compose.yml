@@ -1,0 +1,23 @@
+services:
+  web:
+    image: nginx
+    ports:
+      - 8080:80
+    volumes: 
+      - /home/aleksandra/projects/my_env/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /home/aleksandra/projects/my_env:/var/www/html
+
+  php-fpm:
+    container_name: php-fpm
+    build: ./docker/php/
+    volumes:
+      - /home/aleksandra/projects/my_env:/var/www/html
+
+  postgres_db:
+    image: postgres:13
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
