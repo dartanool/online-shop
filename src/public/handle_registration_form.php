@@ -9,20 +9,33 @@ function validateEmail($email) {
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return true;
     } else {
-        return false;
+        echo "Email '$email' не валиден.";
+    }
+}
+function validatePassword($password, $check_password)
+{
+    if ((strlen($password) > 4 || strlen($password) < 72) ||
+        (preg_match('/[A-Z]/', $password) ||
+        preg_match('/[a-z]/', $password) ||
+        preg_match('/[0-9]/', $password) ))
+    {
+        if ($check_password == $password) {
+            return true;
+        } else {
+            echo "Пароли не совпадают";
+        }
+    } else {
+        echo "Некорректный пароль.
+             Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
     }
 }
 
 if (validateEmail($email)) {
-    if ($check_password == $password) {
+    if (validatePassword($password, $check_password)) {
         $pdo->exec("INSERT INTO users (name, email, password)  VALUES ('$name', '$email', '$password')");
         $statement =$pdo -> query("SELECT * FROM users ORDER BY id DESC LIMIT 1 ");
         $result = $statement-> fetch();
         print_r($result);
-    } else {
-        echo "Пароли не совпадают";
     }
-} else {
-    echo "Email '$email' не валиден.";
 }
 
