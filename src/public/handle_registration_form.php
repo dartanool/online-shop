@@ -44,8 +44,7 @@ function validatePassword($password, $check_password)
         preg_match('/[a-z]/', $password) &&
         preg_match('/[0-9]/', $password) ))
     {
-        return "Некорректный пароль.
-             Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
+        return "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
     } elseif ($check_password !== $password) {
         return  "Пароли не совпадают";
     }
@@ -59,4 +58,4 @@ if (empty($errors)) {
 
 }
 
-//include registration_form.php;
+require_once './registration_form.php';

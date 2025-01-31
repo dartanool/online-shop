@@ -11,18 +11,30 @@
   <div class="wrapper">
     <h2>Registration</h2>
     <form action= "handle_registration_form.php">
-      <div class="input-box">
-        <input type="text" placeholder="Enter your name" name ="name" required>
-      </div>
-      <div class="input-box">
-        <input type="text" placeholder="Enter your email" name ="email" required>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Create password" name ="password" required>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Confirm password" name ="check_password" required>
-      </div>
+        <label for="name"><b>Name</b></label>
+        <?php if (isset($errors['name'])): ?>
+            <label style="color: red"><?php echo $errors['name'];?></label>
+        <?php endif; ?>
+        <div class="input-box">
+             <input type="text" placeholder="Enter your name" name ="name" required>
+         </div>
+        <label for="email"><b>Email</b></label>
+        <?php if (isset($errors['email'])): ?>
+            <label style="color: red"><?php echo $errors['email'];?></label>
+        <?php endif; ?>
+        <div class="input-box">
+            <input type="text" placeholder="Enter your email" name ="email" required>
+         </div>
+        <label for="password"><b>Password</b></label>
+        <?php if (isset($errors['password'])): ?>
+            <label style="color: red"><?php echo $errors['password'];?></label>
+        <?php endif; ?>
+        <div class="input-box">
+            <input type="password" placeholder="Create password" name ="password" required>
+        </div>
+        <div class="input-box">
+            <input type="password" placeholder="Confirm password" name ="check_password" required>
+        </div>
       <div class="input-box button">
         <input type="Submit" value="Register Now">
       </div>
@@ -48,7 +60,7 @@
     }
     .wrapper{
         position: relative;
-        max-width: 430px;
+        max-width: 800px;
         width: 100%;
         background: #fff;
         padding: 34px;
