@@ -11,15 +11,6 @@ if (isset($_POST['name'])) {
     $errors['name'] = "Name is not filled";
 }
 
-if (isset($_POST['email'])) {
-    $email = $_POST['email'];
-    $emailError = validateEmail($email);
-    if ($emailError) {
-        $errors['email'] = $emailError;
-    }
-} else {
-    $errors['email'] = "Email is not filled";
-}
 
 if (isset($_POST['password']) && isset($_POST['check_password'])) {
     $password = $_POST['password'];
@@ -30,6 +21,16 @@ if (isset($_POST['password']) && isset($_POST['check_password'])) {
     }
 } else {
     $errors['password'] = "Password and Check_password are not filled";
+}
+
+if (isset($_POST['email'])) {
+    $email = $_POST['email'];
+    $emailError = validateEmail($email);
+    if ($emailError) {
+        $errors['email'] = $emailError;
+    }
+} else {
+    $errors['email'] = "Email is not filled";
 }
 
 function validateName($name) {
@@ -73,9 +74,11 @@ function validatePassword($password, $check_password)
 
 if (empty($errors)) {
     $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
+
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
     $statement = $pdo->prepare("INSERT INTO users (name, email, password)  VALUES (:name, :email, :password)");
     $statement->execute(['name'=>$name,'email'=>$email, 'password'=>$password]);
-
 
     $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
     $statement->execute(['email'=>$email]);
