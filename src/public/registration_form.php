@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<!-- Coding By CodingNepal - codingnepalweb.com -->
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Registration or Sign Up form in HTML CSS | CodingLab </title>
-    <link rel="stylesheet" href="style.css">
-   </head>
 <body>
   <div class="wrapper">
     <h2>Registration</h2>
-    <form action= "handle_registration_form.php">
+    <form action= "handle_registration_form.php" method="post">
         <label for="name"><b>Name</b></label>
         <?php if (isset($errors['name'])): ?>
             <label style="color: red"><?php echo $errors['name'];?></label>
@@ -60,7 +52,7 @@
     }
     .wrapper{
         position: relative;
-        max-width: 800px;
+        max-width: 1000px;
         width: 100%;
         background: #fff;
         padding: 34px;
