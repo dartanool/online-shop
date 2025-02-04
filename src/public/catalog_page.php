@@ -27,13 +27,5 @@
     ;
         flex-direction: column;
     }
-    .u-container-layout {
-        position: relative;
-        flex: 1;
-        max-width: 100%;
-        transition-duration: inherit;
-    }
-    *, *:before, *:after {
-        box-sizing: border-box;
-    }
+
 </style>

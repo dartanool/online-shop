@@ -1,4 +1,5 @@
 <?php
+session_start();
 $username = $_POST['username'];
 $password = $_POST['password'];
 
@@ -9,7 +10,11 @@ $statement->execute([':email'=> $username]);
 
 $user = $statement->fetch();
 
-$errors =validation($username, $password, $user);
+if ($user === false) {
+    $errors = "username doesn't exist";
+} else {
+    $errors =validation($username, $password, $user);
+}
 
 function validation($username, $password, array $user){
     if (!(isset($username) && isset($password))){
@@ -21,12 +26,11 @@ function validation($username, $password, array $user){
         if (!(password_verify($password, $password_DB))) {
             return "username or password incorrect";
         } else {
-            setcookie('user_id', $user['id']);
+//            setcookie('user_id', $user['id']);
+            $_SESSION['user_id'] = $user['id'];
             header("Location: /catalog.php");
             require_once './catalog.php';
         }
-    } else {
-        return "username doesn't exist";
     }
 }
 
