@@ -15,38 +15,26 @@ if  (!(isset($_SESSION['user_id']))){
 
 // а можно ли user не находить, но чтобы в форме все равно он отображался
 
-    print_r($errors);
-    print_r( (empty($errors)) );
-    print_r("1 -");
-    print_r(!(empty($data['name'])));
-    print_r("2 -");
-    print_r(!(empty($data['password'])));
-    print_r("3 -");
-    print_r(!(empty($data['email'])));
 
     if (empty($errors)) //(!(isset($errors))) // или лучше empty  //  нет ошибок, массив пуст => true
     {
-        print("hi");
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-
-        $password = password_hash($password, PASSWORD_DEFAULT);
-
-        if (!(empty($name))) // не пустой => true
+        if (!(empty($data['name']))) // не пустой => true
         {
+            $name = $_POST['name'];
             $statement = $pdo->prepare("UPDATE users SET name = :name WHERE id = {$_SESSION['user_id']}");
             $statement->execute([':name' => $name]);
         }
 
-        if (!(empty($email)))
+        if (!(empty($data['email'])))
         {
+            $email = $_POST['email'];
             $statement = $pdo->prepare("UPDATE users SET email = :email WHERE id = {$_SESSION['user_id']}");
             $statement->execute([':email' => $email]);
         }
 
-        if (!(empty($password)))
+        if (!(empty($data['password'])))
         {
+            $password = $_POST['password'];
             $statement = $pdo->prepare("UPDATE users SET password = :password WHERE id = {$_SESSION['user_id']}");
             $statement->execute([':password' => $password]);
 

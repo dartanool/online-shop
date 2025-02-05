@@ -28,42 +28,48 @@
             <i class="fa fa-pen fa-xs edit"></i>
             <table>
                 <tbody>
-                <tr>
-                    <td>Name</td>
-                    <td>:</td>
-                    <td>
-                        <div class="input-box">
-                            <input type="text" name="name" placeholder="Username"  />
-                        </div>
-                    </td>
+                <tr><td>Name</td>
+                    <?php if (isset($errors['name'])): ?>
+                        <td style="color: red"><?php echo $errors['name'];?></td>
+                    <?php endif; ?>
                 </tr>
+                <td>
+                    <div class="input-box">
+                        <input type="text" name="name" placeholder="Username"  />
+                    </div>
+                </td>
                 <tr>
                     <td>Email</td>
-                    <td>:</td>
-                    <td>
-                        <div class="input-box">
-                            <input type="text" name="email" placeholder="Email" />
-                        </div>
-                    </td>
+                    <?php if (isset($errors['email'])): ?>
+                        <td style="color: red"><?php echo $errors['email'];?></td>
+                    <?php endif; ?>
                 </tr>
+                <td>
+                    <div class="input-box">
+                        <input type="text" name="email" placeholder="Email" />
+                    </div>
+                </td>
                 <tr>
                     <td>Password</td>
-                    <td>:</td>
-                    <td>
-                        <div class="input-box">
-                            <input type="password" name="password" placeholder="Password" />
-                        </div>
-                    </td>
+                    <?php if (isset($errors['password'])): ?>
+                        <td style="color: red"><?php echo $errors['password'];?></td>
+                    <?php endif; ?>
                 </tr>
+                <td>
+                    <div class="input-box">
+                        <input type="password" name="password" placeholder="Password" />
+                    </div>
+                </td>
+
                 <tr>
                     <td>Check password</td>
-                    <td>:</td>
-                    <td>
-                        <div class="input-box">
-                            <input type="password" name="checkPassword" placeholder="Confirm password" />
-                        </div>
-                    </td>
                 </tr>
+                <td>
+                    <div class="input-box">
+                        <input type="password" name="checkPassword" placeholder="Confirm password" />
+                    </div>
+                </td>
+
                 </tbody>
             </table>
 <!--            <button type="submit" class="btn btn-primary btn-block btn-large">Save</button>-->
@@ -199,6 +205,16 @@
         font-size: 16px;
         height: 270px;
         width: 80%;
+    }
+    .input-box.button input{
+        color: #fff;
+        letter-spacing: 1px;
+        border: none;
+        background: #4070f4;
+        cursor: pointer;
+    }
+    .input-box.button input:hover{
+        background: #0e4bf1;
     }
 
 
