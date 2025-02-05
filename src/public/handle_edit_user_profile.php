@@ -31,6 +31,8 @@ if  (!(isset($_SESSION['user_id']))){
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
         if (!(empty($name))) // не пустой => true
         {
             $statement = $pdo->prepare("UPDATE users SET name = :name WHERE id = {$_SESSION['user_id']}");
