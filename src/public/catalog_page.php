@@ -1,6 +1,7 @@
 
 <html lang="en" dir="ltr">
 <h2>Catalog</h2>
+<a href="handle_user_profile.php">My profile</a>
 <form action= "catalog_page.php" method="post">
     <div class="u-repeater u-repeater-1">
         <?php foreach ($products as $product):?>
