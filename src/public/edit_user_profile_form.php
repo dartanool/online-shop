@@ -148,16 +148,6 @@
         padding-top: 20px;
     }
 
-    .job {
-        font-size: 16px;
-        font-weight: bold;
-        padding-top: 10px;
-    }
-
-    .url, hr {
-        text-align: center;
-    }
-
     .url hr {
         margin-left: 20%;
         width: 60%;
@@ -212,6 +202,9 @@
         border: none;
         background: #4070f4;
         cursor: pointer;
+
+        width: 15em; /* Ширина кнопки */
+        height: 2em; /* Высота кнопки */
     }
     .input-box.button input:hover{
         background: #0e4bf1;

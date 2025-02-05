@@ -68,9 +68,9 @@ if (empty($errors))
     $statement->execute([':email' => $email]);
 
     $result = $statement-> fetch();
-    echo "<pre>";
-    print_r($result);
-    echo "</pre>";
+//    echo "<pre>";
+//    print_r($result);
+//    echo "</pre>";
 
 }
 
