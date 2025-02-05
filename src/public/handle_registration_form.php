@@ -11,9 +11,11 @@ function validate(array $data): array
         $errors['name'] = "Name {$data['name']} too short";
     }
 
-    if (!(isset($data['password']) && isset($data['check_password'])))
-    {
-        $errors['password'] = "Password and Check_password are not filled";
+    if (!(isset($data['password']))) {
+        $errors['password'] = "Password is not filled";
+    } elseif (!(isset($data['check_password']))){
+
+        $errors['password'] = "Check_password is not filled";
 
     } elseif (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
         preg_match('/[A-Z]/', $data['password']) &&
@@ -53,7 +55,7 @@ $errors = validate($data);
 if (empty($errors))
 {
     $name = $_POST['name'];
-    $email = $_POST['mail'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
     $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
