@@ -33,7 +33,7 @@
                     <td>:</td>
                     <td>
                         <div class="input-box">
-                            <input type="text" name="name" placeholder="Username" required="required" />
+                            <input type="text" name="name" placeholder="Username"  />
                         </div>
                     </td>
                 </tr>
@@ -42,7 +42,7 @@
                     <td>:</td>
                     <td>
                         <div class="input-box">
-                            <input type="text" name="email" placeholder="Email" required="required" />
+                            <input type="text" name="email" placeholder="Email" />
                         </div>
                     </td>
                 </tr>
@@ -51,7 +51,7 @@
                     <td>:</td>
                     <td>
                         <div class="input-box">
-                            <input type="password" name="password" placeholder="Password" required="required" />
+                            <input type="password" name="password" placeholder="Password" />
                         </div>
                     </td>
                 </tr>
@@ -60,7 +60,7 @@
                     <td>:</td>
                     <td>
                         <div class="input-box">
-                            <input type="password" name="checkPassword" placeholder="Confirm password" required="required" />
+                            <input type="password" name="checkPassword" placeholder="Confirm password" />
                         </div>
                     </td>
                 </tr>
