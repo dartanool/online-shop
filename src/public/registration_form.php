@@ -2,7 +2,7 @@
 <body>
   <div class="wrapper">
     <h2>Registration</h2>
-    <form action= "handle_registration_form.php" method="post">
+    <form action= "/registration" method="post">
         <label for="name"><b>Name</b></label>
         <?php if (isset($errors['name'])): ?>
             <label style="color: red"><?php echo $errors['name'];?></label>
@@ -80,7 +80,7 @@
     }
     .wrapper form .input-box{
         height: 52px;
-        margin: 18px 0;
+        margin: 18px ;
     }
     form .input-box input{
         height: 100%;
