@@ -15,4 +15,6 @@ if ($requestUri == '/registration') {
     } elseif ($requestMethod ==='POST'){
         require_once 'handle_login.php';
     }
+} elseif ($requestUri == '/catalog') {
+    require_once 'catalog.php';
 }

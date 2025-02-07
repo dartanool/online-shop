@@ -26,7 +26,7 @@ if (empty($errors))
 
             $_SESSION['user_id'] = $user['id'];
             //setcookie('user_id', $user['id']);
-            header("Location: /catalog.php");
+            header("Location: /catalog");
 
         } else {
             $errors = "username or password incorrect";
