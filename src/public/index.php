@@ -9,4 +9,10 @@ if ($requestUri == '/registration') {
     } elseif ($requestMethod ==='POST'){
         require_once 'handle_registration_form.php';
     }
+} elseif ($requestUri == '/login') {
+    if ($requestMethod ==='GET'){
+        require_once 'login_form.php';
+    } elseif ($requestMethod ==='POST'){
+        require_once 'handle_login.php';
+    }
 }

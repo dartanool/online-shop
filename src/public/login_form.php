@@ -3,7 +3,7 @@
     <?php if (isset($errors)): ?>
     <label style="color: red"><?php echo $errors;?></label>
     <?php endif ?>
-    <form action="handle_login.php" method="POST">
+    <form action="/login" method="POST">
         <input type="text" name="username" placeholder="Username" required="required" />
         <input type="password" name="password" placeholder="Password" required="required" />
         <button type="submit" class="btn btn-primary btn-block btn-large">Log in.</button>
