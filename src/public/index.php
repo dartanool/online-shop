@@ -21,4 +21,7 @@ if ($requestUri == '/registration') {
     require_once 'handle_user_profile.php';
 } elseif ($requestUri == '/edit_user_profile') {
         require_once 'handle_edit_user_profile.php';
+} else {
+    require_once '404.php';
+
 }
