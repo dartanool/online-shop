@@ -1,7 +1,7 @@
 
 <html lang="en" dir="ltr">
 <h2>Catalog</h2>
-<a href="handle_user_profile.php">My profile</a>
+<a href="user_profile">My profile</a>
     <div class="u-repeater u-repeater-1">
         <?php foreach ($products as $product):?>
             <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-1">
