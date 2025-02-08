@@ -6,6 +6,7 @@
         <div class="product-item">
             <img class="product-image" src="<?php echo $product['image_url']?>" alt="<?php echo $product['name']?>" data-image-width="720" data-image-height="1080">
             <div class="product-info">
+                <h6 class="product-name"> <?php echo $product['id']?></h6>
                 <h6 class="product-name"> <?php echo $product['name']?></h6>
                 <h5 class="product-price"><?php echo $product['price']?></h5>
             </div>
