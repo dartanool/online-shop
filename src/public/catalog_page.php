@@ -1,30 +1,57 @@
-
 <html lang="en" dir="ltr">
 <h2>Catalog</h2>
 <a href="user_profile">My profile</a>
-    <div class="u-repeater u-repeater-1">
-        <?php foreach ($products as $product):?>
-            <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-1">
-                <img class="u-expanded-width u-image u-image-default u-image-1" src="<?php echo $product['image_url']?>" alt="" data-image-width="720" data-image-height="1080">
-                <h6 class="u-custom-font u-font-montserrat u-text u-text-default u-text-2"> <?php echo $product['name']?></h6>
-                <h5 class="u-custom-font u-font-montserrat u-text u-text-default u-text-3"><?php echo $product['price']?></h5>
+<div class="product-grid">
+    <?php foreach ($products as $product):?>
+        <div class="product-item">
+            <img class="product-image" src="<?php echo $product['image_url']?>" alt="<?php echo $product['name']?>" data-image-width="720" data-image-height="1080">
+            <div class="product-info">
+                <h6 class="product-name"> <?php echo $product['name']?></h6>
+                <h5 class="product-price"><?php echo $product['price']?></h5>
             </div>
-        <?php endforeach ?>
-    </div>
+        </div>
+    <?php endforeach ?>
+</div>
 </html>
 
 <style>
-    .u-section-3 .u-container-layout-1 {
-        padding: 10px 10px 30px;
-    }
-    .u-valign-bottom {
-        justify-content: flex-end;
-    }
-
-    .u-valign-middle, .u-valign-top, .u-valign-bottom {
-        display: flex
-    ;
-        flex-direction: column;
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 13.33px; /* 20px / 1.5 = 13.33px */
+        padding: 20px;
     }
 
+    .product-item {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .product-image {
+        width: 133.33px; /* 200px / 1.5 = 133.33px */
+        height: 133.33px; /* 200px / 1.5 = 133.33px */
+        object-fit: cover;
+    }
+
+    .product-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .product-name {
+        font-size: 30px;
+    }
+    .product-price {
+        font-size: 28px;
+        color: green;
+    }
+
+    @media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
