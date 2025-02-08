@@ -22,7 +22,7 @@
 <!-- Main -->
 <div class="main">
     <h2>Personal Information</h2>
-    <form action="handle_edit_user_profile.php" method="POST">
+    <form action="edit_user_profile" method="POST">
     <div class="card">
         <div class="card-body">
             <i class="fa fa-pen fa-xs edit"></i>

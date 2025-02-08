@@ -20,7 +20,7 @@
 
     <div class="sidenav-url">
         <div class="url">
-            <a href="handle_edit_user_profile.php" class="active">Edit</a>
+            <a href="edit_user_profile" class="active">Edit</a>
             <hr align="center">
         </div>
     </div>

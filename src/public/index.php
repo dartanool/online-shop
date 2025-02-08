@@ -19,4 +19,6 @@ if ($requestUri == '/registration') {
     require_once 'catalog.php';
 }  elseif ($requestUri == '/user_profile') {
     require_once 'handle_user_profile.php';
+} elseif ($requestUri == '/edit_user_profile') {
+        require_once 'handle_edit_user_profile.php';
 }
