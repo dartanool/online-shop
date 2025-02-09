@@ -45,14 +45,14 @@ function validate(array $data) : array | string
     if (!(isset($data['product_id'])))
     {
         $errors['product_id'] = "Product id incorrect";
-    } elseif (is_int($data['product_id'])) {
+    } elseif (!is_int($data['product_id'])) {
         $errors['product_id'] = "Product id incorrect";
     }
 
     if (!(isset($data['amount'])))
     {
         $errors['amount'] = "Amount incorrect";
-    } elseif (is_int($data['amount'])) {
+    } elseif (!is_int($data['amount'])) {
         $errors['amount'] = "Amount incorrect";
     }
 
