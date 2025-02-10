@@ -14,6 +14,6 @@ if  (!(isset($_SESSION['user_id']))){
 
     $products = $statement->fetchAll();
 
-    require_once "./catalog_page.php";
+    require_once "./catalog/catalog_page.php";
 }
 

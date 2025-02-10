@@ -42,17 +42,17 @@ if  (!(isset($_SESSION['user_id']))){
 function validate(array $data) : array | string
 {
     $errors = [];
-    if (!(isset($data['product_id'])))
+    if (!isset($data['product_id']))
     {
         $errors['product_id'] = "Product id incorrect";
-    } elseif (!is_int($data['product_id'])) {
+    } elseif (is_int($data['product_id'])) {
         $errors['product_id'] = "Product id incorrect";
     }
 
-    if (!(isset($data['amount'])))
+    if (!isset($data['amount']))
     {
         $errors['amount'] = "Amount incorrect";
-    } elseif (!is_int($data['amount'])) {
+    } elseif (is_int($data['amount'])) {
         $errors['amount'] = "Amount incorrect";
     }
 

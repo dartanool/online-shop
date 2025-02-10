@@ -9,4 +9,4 @@ if  (!(isset($_SESSION['user_id']))){
     $user = $statement->fetch();
 }
 
-require_once './user_profile_page.php';
+require_once './profile/user_profile_page.php';

@@ -21,6 +21,6 @@ if  (!(isset($_SESSION['user_id']))){
         $count++;
     }
 
-    require_once "./cart_page.php";
+    require_once "./cart/cart_page.php";
 }
 
