@@ -4,8 +4,8 @@
     <h2>Add product</h2>
     <form action= "/add_product" method="post">
         <label for="product_id"><b>Product id</b></label>
-        <?php if (isset($errors['product_id'])): ?>
-            <label style="color: red"><?php echo $errors['product_id'];?></label>
+        <?php if (isset($errors['productId'])): ?>
+            <label style="color: red"><?php echo $errors['productId'];?></label>
         <?php endif; ?>
         <div class="input-box">
             <input type="text" placeholder="Enter product id" name ="product_id" required>
