@@ -27,14 +27,14 @@ if ($requestUri == '/registration') {
         require_once './catalog/catalog_page.php';
     }
 
-}  elseif ($requestUri == '/user_profile') {
+}  elseif ($requestUri == '/user-profile') {
     require_once './profile/handle_user_profile.php';
 
-} elseif ($requestUri == '/edit_user_profile') {
-        require_once './profile/handle_edit_user_profile.php';
+} elseif ($requestUri == '/edit-user-profile') {
+        require_once './editProfile/handle_edit_user_profile.php';
 
 // Add Product
-} elseif ($requestUri == '/add_product') {
+} elseif ($requestUri == '/add-product') {
     if ($requestMethod ==='GET'){
         require_once './addProduct/add_product_form.php';
     } elseif ($requestMethod ==='POST'){

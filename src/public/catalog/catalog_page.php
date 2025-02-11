@@ -1,6 +1,6 @@
 <html lang="en" dir="ltr">
 <h2>Catalog</h2>
-<a href="user_profile">My profile</a>
+<a href="user-profile">My profile</a>
 <div class="product-grid">
     <?php foreach ($products as $product):?>
         <div class="product-item">

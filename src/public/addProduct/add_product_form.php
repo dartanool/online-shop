@@ -2,7 +2,7 @@
 <body>
 <div class="wrapper">
     <h2>Add product</h2>
-    <form action= "/add_product" method="post">
+    <form action= "/add-product" method="post">
         <label for="product_id"><b>Product id</b></label>
         <?php if (isset($errors['productId'])): ?>
             <label style="color: red"><?php echo $errors['productId'];?></label>

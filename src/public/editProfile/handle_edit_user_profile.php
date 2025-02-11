@@ -40,9 +40,11 @@ if  (!(isset($_SESSION['user_id']))){
 
         }
 
-
+        header('Location: /user-profile');
+        exit;
     }
 }
+require_once './editProfile/edit_user_profile_form.php';
 
 
 function validate(array $data): array
@@ -93,4 +95,4 @@ function validate(array $data): array
     return $errors;
 }
 
-require_once './profile/edit_user_profile_form.php';
+
