@@ -37,6 +37,7 @@ if ($requestUri == '/registration') {
     if ($requestMethod ==='GET'){
         $user->getProfile();
     }
+
 //Edit Profile
 } elseif ($requestUri == '/edit-user-profile') {
     require_once './classes/User.php';
@@ -53,7 +54,9 @@ if ($requestUri == '/registration') {
 
 //cart
 } elseif ($requestUri == '/cart') {
-    require_once './cart/cart.php';
+    require_once './classes/Products.php';
+    $product = new Products();
+    $product->getCart();
 } else {
     http_response_code(404);
     require_once '404.php';
