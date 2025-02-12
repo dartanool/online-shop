@@ -32,7 +32,11 @@ if ($requestUri == '/registration') {
     }
 
 }  elseif ($requestUri == '/user-profile') {
-    require_once './profile/handle_user_profile.php';
+    require_once './classes/User.php';
+    $user = new User();
+    if ($requestMethod ==='GET'){
+        $user->getProfile();
+    }
 
 } elseif ($requestUri == '/edit-user-profile') {
         require_once './editProfile/handle_edit_user_profile.php';

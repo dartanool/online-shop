@@ -78,46 +78,45 @@ class User
 
 
     //Login
-
-public function login()
-{
-    $errors = [];
-    $errors = $this->validateLogin($_POST);
-
-    if (empty($errors))
+    public function login()
     {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $errors = [];
+        $errors = $this->validateLogin($_POST);
 
-        session_start();
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
-
-        $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-        $statement->execute([':email' => $username]);
-
-        $user = $statement->fetch();
-
-        if ($user === false)
+        if (empty($errors))
         {
-            $errors = "username or password incorrect";
-        } elseif ($username === $user['email'])
-        {
-            $passwordDb = $user['password'];
-            if (password_verify($password, $passwordDb)) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
 
-                $_SESSION['user_id'] = $user['id'];
-                //setcookie('user_id', $user['id']);
-                header("Location: /catalog");
+            session_start();
+            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
+            $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $statement->execute([':email' => $username]);
+
+            $user = $statement->fetch();
+
+            if ($user === false)
+            {
+                $errors = "username or password incorrect";
+            } elseif ($username === $user['email'])
+            {
+                $passwordDb = $user['password'];
+                if (password_verify($password, $passwordDb)) {
+
+                    $_SESSION['user_id'] = $user['id'];
+                    //setcookie('user_id', $user['id']);
+                    header("Location: /catalog");
+
+                } else {
+                    $errors = "username or password incorrect";
+                }
             } else {
                 $errors = "username or password incorrect";
             }
-        } else {
-            $errors = "username or password incorrect";
         }
+        require_once './pages/login_form.php';
     }
-    require_once './pages/login_form.php';
-}
     private function validateLogin(array $data) : array
     {
         $errors = [];
@@ -125,7 +124,6 @@ public function login()
         {
             $errors = "username incorrect";
         }
-
         if (!(isset($data['password'])))
         {
             $errors = "password incorrect";
@@ -133,14 +131,29 @@ public function login()
 
         return $errors;
     }
-public function getLogin(){
-    session_status();
-    if (isset($_SESSION['user_id'])){
-        header('Location: /catalog');
-    }
-    require_once './pages/login_form.php';
-}
 
+    public function getLogin(){
+        session_status();
+        if (isset($_SESSION['user_id'])){
+            header('Location: /catalog');
+        }
+        require_once './pages/login_form.php';
+    }
+
+//User_profile
+    public function getProfile(){
+
+        session_start();
+        if (!(isset($_SESSION['user_id']))) {
+            header('Location: login');
+        } else {
+            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
+            $statement = $pdo->query("SELECT * FROM users WHERE id = {$_SESSION['user_id']}");
+            $user = $statement->fetch();
+        }
+
+        require_once './pages/user_profile_page.php';
+    }
 
 
 }
