@@ -13,9 +13,9 @@ if  (!(isset($_SESSION['user_id']))){
 
     $count = 0;
     foreach ($orders as $order) {
-        $product_id = $order['product_id'];
+        $productId = $order['product_id'];
 
-        $productsStatement = $pdo->query("SELECT * FROM products WHERE id = {$product_id}");
+        $productsStatement = $pdo->query("SELECT * FROM products WHERE id = {$productId}");
         $products[$count]= $productsStatement->fetch();
         $products[$count]['amount'] = $order['amount'];
         $count++;

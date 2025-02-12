@@ -5,18 +5,20 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 //Registration
 if ($requestUri == '/registration') {
-    if ($requestMethod ==='GET'){
-        require_once './registration/registration_form.php';
-    } elseif ($requestMethod ==='POST'){
-        require_once './registration/handle_registration_form.php';
-    }
+    require_once './classes/User.php';
+    $user = new User();
+        if ($requestMethod ==='GET'){
+            $user->getRegistrate();
+        } elseif ($requestMethod ==='POST'){
+            $user->registrate();
+        }
 
 //login
 } elseif ($requestUri == '/login') {
     if ($requestMethod ==='GET'){
         require_once './login/login_form.php';
     } elseif ($requestMethod ==='POST'){
-        require_once './/login/handle_login.php';
+        require_once './login/handle_login.php';
     }
 
 //catalog

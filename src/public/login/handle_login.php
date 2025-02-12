@@ -1,6 +1,5 @@
 <?php
-
-$errors =[];
+$errors = [];
 $errors = validate($_POST);
 
 if (empty($errors))
@@ -35,7 +34,7 @@ if (empty($errors))
         $errors = "username or password incorrect";
     }
 }
-function validate(array $data) : array | string
+function validate(array $data) : array
 {
     $errors = [];
     if (!(isset($data['username'])))
@@ -51,4 +50,4 @@ function validate(array $data) : array | string
     return $errors;
 }
 
-require_once './login_form.php';
+require_once './login/login_form.php';
