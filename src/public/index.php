@@ -23,12 +23,6 @@ if ($requestUri == '/registration') {
         $user->login();
     }
 
-//catalog
-} elseif ($requestUri == '/catalog') {
-    require_once './classes/Products.php';
-    $product = new Products();
-    $product->getCatalog();
-
 
 //User Profile
 }  elseif ($requestUri == '/user-profile') {
@@ -46,11 +40,15 @@ if ($requestUri == '/registration') {
 
 // Add Product
 } elseif ($requestUri == '/add-product') {
-    if ($requestMethod ==='GET'){
-        require_once './addProduct/add_product_form.php';
-    } elseif ($requestMethod ==='POST'){
-        require_once './addProduct/handle_add_product.php';
-    }
+    require_once './classes/Products.php';
+    $product = new Products();
+    $product->addProduct();
+
+//catalog
+} elseif ($requestUri == '/catalog') {
+    require_once './classes/Products.php';
+    $product = new Products();
+    $product->getCatalog();
 
 //cart
 } elseif ($requestUri == '/cart') {

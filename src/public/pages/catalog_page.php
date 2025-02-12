@@ -10,7 +10,19 @@
                 <h6 class="product-name"> <?php echo $product['name']?></h6>
                 <h5 class="product-price"><?php echo $product['price']?></h5>
             </div>
+            <form action= "/add-product" method="post">
+                <div class="input-box">
+                    <input type="hidden" placeholder="Enter product id" value="<?php echo $product['id']?>" name ="product_id" required>
+                </div>
+                <label for="amount"><b>Amount</b></label>
+                <?php if (isset($errors['amount'])): ?>
+                    <label style="color: red"><?php echo $errors['amount'];?></label>
+                <?php endif; ?>
+                    <input type="text" placeholder="Enter your amount" name ="amount" required>
+                    <button type="Submit" class="input-box button">Add product</button>
+            </form>
         </div>
+
     <?php endforeach ?>
 </div>
 </html>
@@ -54,5 +66,15 @@
         .product-grid {
             grid-template-columns: 1fr;
         }
+    }
+    .input-box.button input{
+        color: #fff;
+        letter-spacing: 1px;
+        border: none;
+        background: #4070f4;
+        cursor: pointer;
+    }
+    .input-box.button input:hover{
+        background: #0e4bf1;
     }
 </style>
