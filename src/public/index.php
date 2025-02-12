@@ -25,21 +25,23 @@ if ($requestUri == '/registration') {
 
 //catalog
 } elseif ($requestUri == '/catalog') {
-    if ($requestMethod ==='GET'){
-        require_once './catalog/catalog.php';
-    } elseif ($requestMethod ==='POST'){
-        require_once './catalog/catalog_page.php';
-    }
+    require_once './classes/Products.php';
+    $product = new Products();
+    $product->getCatalog();
 
+
+//User Profile
 }  elseif ($requestUri == '/user-profile') {
     require_once './classes/User.php';
     $user = new User();
     if ($requestMethod ==='GET'){
         $user->getProfile();
     }
-
+//Edit Profile
 } elseif ($requestUri == '/edit-user-profile') {
-        require_once './editProfile/handle_edit_user_profile.php';
+    require_once './classes/User.php';
+    $user = new User();
+    $user->editProfile();
 
 // Add Product
 } elseif ($requestUri == '/add-product') {
