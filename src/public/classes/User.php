@@ -1,6 +1,7 @@
 <?php
 class User
 {
+    //Registration
     public function registrate()
     {
         $data = $_POST;
@@ -33,7 +34,7 @@ class User
         require './pages/registration_form.php';
     }
 
-    public function validateRegistration(array $data): array
+    private function validateRegistration(array $data): array
     {
         $errors = [];
 
@@ -74,5 +75,72 @@ class User
         }
         return $errors;
     }
+
+
+    //Login
+
+public function login()
+{
+    $errors = [];
+    $errors = $this->validateLogin($_POST);
+
+    if (empty($errors))
+    {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        session_start();
+        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
+
+        $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->execute([':email' => $username]);
+
+        $user = $statement->fetch();
+
+        if ($user === false)
+        {
+            $errors = "username or password incorrect";
+        } elseif ($username === $user['email'])
+        {
+            $passwordDb = $user['password'];
+            if (password_verify($password, $passwordDb)) {
+
+                $_SESSION['user_id'] = $user['id'];
+                //setcookie('user_id', $user['id']);
+                header("Location: /catalog");
+
+            } else {
+                $errors = "username or password incorrect";
+            }
+        } else {
+            $errors = "username or password incorrect";
+        }
+    }
+    require_once './pages/login_form.php';
+}
+    private function validateLogin(array $data) : array
+    {
+        $errors = [];
+        if (!(isset($data['username'])))
+        {
+            $errors = "username incorrect";
+        }
+
+        if (!(isset($data['password'])))
+        {
+            $errors = "password incorrect";
+        }
+
+        return $errors;
+    }
+public function getLogin(){
+    session_status();
+    if (isset($_SESSION['user_id'])){
+        header('Location: /catalog');
+    }
+    require_once './pages/login_form.php';
+}
+
+
 
 }
