@@ -5,8 +5,8 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 //Registration
 if ($requestUri == '/registration') {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
         if ($requestMethod ==='GET'){
             $user->getRegistrate();
         } elseif ($requestMethod ==='POST'){
@@ -15,8 +15,8 @@ if ($requestUri == '/registration') {
 
 //login
 } elseif ($requestUri == '/login') {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
     if ($requestMethod ==='GET'){
         $user->getLogin();
     } elseif ($requestMethod ==='POST'){
@@ -24,36 +24,41 @@ if ($requestUri == '/registration') {
     }
 
 
-//User Profile
+//UserController Profile
 }  elseif ($requestUri == '/user-profile') {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
     if ($requestMethod ==='GET'){
         $user->getProfile();
     }
 
 //Edit Profile
 } elseif ($requestUri == '/edit-user-profile') {
-    require_once './classes/User.php';
-    $user = new User();
-    $user->editProfile();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
+    if ($requestMethod ==='GET'){
+        $user->getEditProfile();
+    } elseif ($requestMethod ==='POST'){
+        $user->editProfile();
+    }
+
 
 // Add Product
 } elseif ($requestUri == '/add-product') {
-    require_once './classes/Products.php';
-    $product = new Products();
+    require_once '../Controllers/CartController.php';
+    $product = new CartController();
     $product->addProduct();
 
 //catalog
 } elseif ($requestUri == '/catalog') {
-    require_once './classes/Products.php';
-    $product = new Products();
+    require_once '../Controllers/ProductController.php';
+    $product = new ProductController();
     $product->getCatalog();
 
 //cart
 } elseif ($requestUri == '/cart') {
-    require_once './classes/Products.php';
-    $product = new Products();
+    require_once '../Controllers/CartController.php';
+    $product = new CartController();
     $product->getCart();
 } else {
     http_response_code(404);

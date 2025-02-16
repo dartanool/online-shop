@@ -1,10 +1,9 @@
 <?php
-
-namespace Controllers\classes;
-class User
+class UserController
 {
+
     //Registration
-    public function registrate()
+    public function registrate() :void
     {
         $data = $_POST;
         $errors = $this->validateRegistration($data);
@@ -25,17 +24,17 @@ class User
 
             $result = $statement->fetch();
         }
-        require_once './pages/registration_form.php';
+        require_once '../Views/registration_form.php';
 
     }
 
-    public function getRegistrate()
+    public function getRegistrate() : void
     {
         session_status();
         if (isset($_SESSION['user_id'])) {
             header('Location: /catalog');
         }
-        require './pages/registration_form.php';
+        require '../Views/registration_form.php';
     }
 
     private function validateRegistration(array $data): array
@@ -82,7 +81,7 @@ class User
 
 
     //Login
-    public function login()
+    public function login() : void
     {
         $errors = [];
         $errors = $this->validateLogin($_POST);
@@ -116,7 +115,7 @@ class User
                 $errors = "username or password incorrect";
             }
         }
-        require_once './pages/login_form.php';
+        require_once '../Views/login_form.php';
     }
 
     private function validateLogin(array $data): array
@@ -138,7 +137,7 @@ class User
         if (isset($_SESSION['user_id'])) {
             header('Location: /catalog');
         }
-        require_once './pages/login_form.php';
+        require_once './Views/login_form.php';
     }
 
 //User_profile
@@ -154,7 +153,7 @@ class User
             $user = $statement->fetch();
         }
 
-        require_once './pages/user_profile_page.php';
+        require_once '../Views/user_profile_page.php';
     }
 
 //Edit Profile
@@ -201,7 +200,7 @@ class User
         return $errors;
     }
 
-    public function editProfile()
+    public function editProfile() : void
     {
         session_start();
 
@@ -239,11 +238,11 @@ class User
             header('Location: /user-profile');
             exit;
         }
-        require_once './pages/edit_user_profile_form.php';
+        require_once '../Views/edit_user_profile_form.php';
     }
 
 
-    public function getEditProfile()
+    public function getEditProfile() : void
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
@@ -253,8 +252,6 @@ class User
         $statement = $pdo->query("SELECT * FROM users WHERE id = {$_SESSION['user_id']}");
         $user = $statement->fetch();
 
-        require_once './pages/edit_user_profile_form.php';
+        require_once '../Views/edit_user_profile_form.php';
     }
-
-
 }
