@@ -1,5 +1,5 @@
 <html lang="en" dir="ltr">
-<h2>Catalog</h2>
+<h2>Cart</h2>
 <div class="product-grid">
     <?php foreach ($products as $product):?>
         <div class="product-item">

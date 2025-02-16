@@ -1,4 +1,6 @@
 <?php
+
+namespace Controllers\classes;
 class User
 {
     //Registration
@@ -199,10 +201,11 @@ class User
         return $errors;
     }
 
-    public function editProfile(){
+    public function editProfile()
+    {
         session_start();
 
-        if  (!(isset($_SESSION['user_id']))){
+        if (!(isset($_SESSION['user_id']))) {
             header('Location: login_form.php');
         } else {
             $data = $_POST;
@@ -210,8 +213,6 @@ class User
             $errors = $this->validateEdit($data);
 
             $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
-            $statement = $pdo->query("SELECT * FROM users WHERE id = {$_SESSION['user_id']}");
-            $user = $statement->fetch();
 
             if (empty($errors)) //(!(isset($errors))) // или лучше empty  //  нет ошибок, массив пуст => true
             {
@@ -222,25 +223,36 @@ class User
                     $statement->execute([':name' => $name]);
                 }
 
-                if (!(empty($data['email'])))
-                {
+                if (!(empty($data['email']))) {
                     $email = $_POST['email'];
                     $statement = $pdo->prepare("UPDATE users SET email = :email WHERE id = {$_SESSION['user_id']}");
                     $statement->execute([':email' => $email]);
                 }
 
-                if (!(empty($data['password'])))
-                {
+                if (!(empty($data['password']))) {
                     $password = $_POST['password'];
                     $statement = $pdo->prepare("UPDATE users SET password = :password WHERE id = {$_SESSION['user_id']}");
                     $statement->execute([':password' => $password]);
 
                 }
-                // как это решить
-//                header('Location: /user-profile');
-//                exit;
             }
+            header('Location: /user-profile');
+            exit;
         }
+        require_once './pages/edit_user_profile_form.php';
+    }
+
+
+    public function getEditProfile()
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+        }
+        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
+        $statement = $pdo->query("SELECT * FROM users WHERE id = {$_SESSION['user_id']}");
+        $user = $statement->fetch();
+
         require_once './pages/edit_user_profile_form.php';
     }
 
