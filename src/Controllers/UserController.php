@@ -12,17 +12,16 @@ class UserController
             $name = $_POST['name'];
             $email = $_POST['email'];
             $password = $_POST['password'];
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            $statement = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-            $statement->execute([':name' => $name, ':email' => $email, ':password' => $password]);
+            require_once "../Model/User.php";
+            $userModel = new User();
 
-            $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $statement->execute([':email' => $email]);
+            $userModel->insertNameEmailPassword($name, $email, $password);
 
-            $result = $statement->fetch();
+            $result= $userModel->getByEmail($email);
+
         }
         require_once '../Views/registration_form.php';
 
@@ -69,10 +68,11 @@ class UserController
         } else {
             $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
-            $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $statement->execute(['email' => $data['email']]);
+            require_once "../Model/User.php";
+            $userModel = new User();
+            $statement= $userModel->getByEmail($data['email']);
 
-            if (!(empty($statement->fetch()))) {
+            if (!(empty($statement))) {
                 $errors['email'] = "Email {$data['email']} already exists";
             }
         }
@@ -93,10 +93,9 @@ class UserController
             session_start();
             $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
-            $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $statement->execute([':email' => $username]);
-
-            $user = $statement->fetch();
+            require_once "../Model/User.php";
+            $userModel = new User();
+            $user = $userModel->getByEmail($username);
 
             if ($user === false) {
                 $errors = "username or password incorrect";
@@ -143,16 +142,15 @@ class UserController
 //User_profile
     public function getProfile()
     {
-
         session_start();
         if (!(isset($_SESSION['user_id']))) {
             header('Location: login');
         } else {
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
-            $statement = $pdo->query("SELECT * FROM users WHERE id = {$_SESSION['user_id']}");
-            $user = $statement->fetch();
-        }
+            require_once "../Model/User.php";
+            $userModel = new User();
 
+            $user = $userModel->getById($_SESSION['user_id']);
+        }
         require_once '../Views/user_profile_page.php';
     }
 
@@ -173,12 +171,12 @@ class UserController
             if (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
                 $errors['email'] = "Email {$data['email']} не валиден.";
             } else {
-                $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
-                $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-                $statement->execute(['email' => $data['email']]);
+                require_once "../Model/User.php";
+                $userModel = new User();
+                $statement= $userModel->getByEmail($data['email']);
 
-                if (!(empty($statement->fetch()))) {
+                if (!empty($statement)) {
                     $errors['email'] = "Email {$data['email']} already exists";
                 }
             }
@@ -211,28 +209,28 @@ class UserController
 
             $errors = $this->validateEdit($data);
 
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
-
             if (empty($errors)) //(!(isset($errors))) // или лучше empty  //  нет ошибок, массив пуст => true
             {
+                $id = $_SESSION['user_id'];
+
+                require_once "../Model/User.php";
+                $userModel = new User();
+
                 if (!(empty($data['name']))) // не пустой => true
                 {
                     $name = $_POST['name'];
-                    $statement = $pdo->prepare("UPDATE users SET name = :name WHERE id = {$_SESSION['user_id']}");
-                    $statement->execute([':name' => $name]);
+                    $userModel->updateNameById($name, $id);
+
                 }
 
                 if (!(empty($data['email']))) {
                     $email = $_POST['email'];
-                    $statement = $pdo->prepare("UPDATE users SET email = :email WHERE id = {$_SESSION['user_id']}");
-                    $statement->execute([':email' => $email]);
+                    $userModel->updateEmailById($email, $id);
                 }
 
                 if (!(empty($data['password']))) {
                     $password = $_POST['password'];
-                    $statement = $pdo->prepare("UPDATE users SET password = :password WHERE id = {$_SESSION['user_id']}");
-                    $statement->execute([':password' => $password]);
-
+                    $userModel->updatePasswordById($password, $id);
                 }
             }
             header('Location: /user-profile');
@@ -248,9 +246,11 @@ class UserController
         if (!isset($_SESSION['user_id'])) {
             header('Location: /login');
         }
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
-        $statement = $pdo->query("SELECT * FROM users WHERE id = {$_SESSION['user_id']}");
-        $user = $statement->fetch();
+
+        require_once "../Model/User.php";
+        $userModel = new User();
+
+        $user = $userModel->getById($_SESSION['user_id']);
 
         require_once '../Views/edit_user_profile_form.php';
     }
