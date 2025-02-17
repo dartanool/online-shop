@@ -1,27 +1,27 @@
 <?php
 class CartController
 {
-    //Cart
+    //UserProduct
     public function getCart() : void
     {
         session_start();
 
         if (!(isset($_SESSION['user_id']))) {
-            header('Location: login_form.php');
+            header('Location: login');
         } else {
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
-            $statement = $pdo->query("SELECT * FROM user_products WHERE user_id = {$_SESSION['user_id']}");
-
-            $orders = $statement->fetchAll();
-
+            require_once "../Model/UserProduct.php";
+            $cartModel = new UserProduct();
+            $orders = $cartModel->getById($_SESSION['user_id']);
 
             $count = 0;
             foreach ($orders as $order) {
                 $productId = $order['product_id'];
 
-                $productsStatement = $pdo->query("SELECT * FROM products WHERE id = {$productId}");
-                $products[$count] = $productsStatement->fetch();
+                require_once "../Model/Product.php";
+                $cartModel = new Product();
+
+                $products[$count] = $cartModel->getByProductId($productId);
                 $products[$count]['amount'] = $order['amount'];
                 $count++;
             }
@@ -62,7 +62,7 @@ class CartController
         session_start();
 
         if (!(isset($_SESSION['user_id']))) {
-            header('Location: login_form.php');
+            header('Location: login');
         } else {
 
             $data = $_POST;
