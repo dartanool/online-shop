@@ -57,6 +57,12 @@ class App
                 'method'=> 'getCart'
             ],
         ],
+        '/logout' => [
+            'GET' => [
+                'class'=> 'UserController',
+                'method'=> 'logout'
+            ]
+        ]
 
     ];
 

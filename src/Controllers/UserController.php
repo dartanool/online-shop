@@ -254,4 +254,15 @@ class UserController
 
         require_once '../Views/edit_user_profile_form.php';
     }
+
+//logout
+
+    public function logout(): void
+    {
+        session_start();
+        if (isset($_SESSION['user_id'])) {
+            session_destroy();
+            header('Location: /login');
+        }
+    }
 }
