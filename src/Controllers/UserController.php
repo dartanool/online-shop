@@ -20,7 +20,7 @@ class UserController
 
             $userModel->insertNameEmailPassword($name, $email, $password);
 
-            $result= $userModel->getByEmail($email);
+//            $result = $userModel->getByEmail($email);
 
         }
         require_once '../Views/registration_form.php';
@@ -136,7 +136,7 @@ class UserController
         if (isset($_SESSION['user_id'])) {
             header('Location: /catalog');
         }
-        require_once './Views/login_form.php';
+        require_once '../Views/login_form.php';
     }
 
 //User_profile

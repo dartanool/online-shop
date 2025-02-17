@@ -18,7 +18,7 @@ class User
     }
 
 
-    public function getByEmail(string $email) : array // add false
+    public function getByEmail(string $email) : array | false// add false
     {
         $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
