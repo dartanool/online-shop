@@ -11,8 +11,8 @@ class CartController
         } else {
 
             require_once "../Model/UserProduct.php";
-            $cartModel = new UserProduct();
-            $orders = $cartModel->getById($_SESSION['user_id']);
+            $productModel = new UserProduct();
+            $orders = $productModel->getById($_SESSION['user_id']);
 
             $count = 0;
             foreach ($orders as $order) {
@@ -40,10 +40,10 @@ class CartController
         if (!isset($productId)) {
             $errors['productId'] = "ProductController id incorrect";
         } else {
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
-            $statement = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
-            $statement->execute([':productId' => $productId]);
-            $data = $statement->fetch();
+            require_once "../Model/Product.php";
+            $productModel = new Product();
+
+            $data = $productModel->getByProductId($productId);
 
             if ($data === false) {
                 $errors['productId'] = "ProductController doesn't exist";
@@ -72,21 +72,19 @@ class CartController
                 $userId = $_SESSION['user_id'];
                 $productId = $_POST['product_id'];
                 $amount = $_POST['amount'];
-                $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
-                $statement = $pdo->prepare("SELECT * FROM user_products WHERE product_id = :productId AND user_id =:userId");
-                $statement->execute(['productId' => $productId, 'userId' => $userId]);
+                require_once "../Model/UserProduct.php";
 
-                $data = $statement->fetch();
+                $cartModel = new UserProduct();
+
+                $data = $cartModel->getByIdProductId($userId, $productId);
 
                 if ($data === false) {
-                    $statement = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES ($userId, :product_id, :amount)");
-                    $statement->execute(['product_id' => $productId, 'amount' => $amount]);
+                    $cartModel->insertByIdProductIdAmount($userId, $productId, $amount);
                 } else {
                     $amount = $data['amount'] + $amount;
                     // update
-                    $statement = $pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id =:userId and product_id = :product_id");
-                    $statement->execute(['amount' => $amount, 'userId' => $userId, 'product_id' => $productId]);
+                    $cartModel->updateByIdProductIdAmount($userId, $productId, $amount);
                 }
 
 
