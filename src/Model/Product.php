@@ -1,12 +1,11 @@
 <?php
-class Product
+require_once "../Model/Model.php";
+class Product extends Model
 {
-
     public function getById() : array
     {
-        require  "../../database.php";
 
-        $statement = $pdo->query("SELECT * FROM products");
+        $statement = $this->pdo->query("SELECT * FROM products");
 
         $products = $statement->fetchAll();
 
@@ -16,7 +15,7 @@ class Product
     public function getByProductId(int $productId) : array | false
     {
 
-        $statement = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
+        $statement = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
         $statement->execute([':productId' => $productId]);
 
         $data = $statement->fetch();
