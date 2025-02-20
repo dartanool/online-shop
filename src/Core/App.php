@@ -1,5 +1,5 @@
 <?php
-
+namespace Core;
 class App
 {
     private array $routes = [

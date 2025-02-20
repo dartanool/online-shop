@@ -1,7 +1,7 @@
 <?php
-
-$autoLoadCore = function (string $className) {
-    $path = "../Core/$className.php";
+$autoLoad = function (string $path) {
+    $elem = explode("\\", $path);
+    $path = "../$elem[0]/$elem[1].php";
     if (file_exists($path)) {
         require_once $path;
         return true;
@@ -9,18 +9,7 @@ $autoLoadCore = function (string $className) {
     return false;
 };
 
-$autoLoadController = function (string $className) {
-    $path = "../Controllers/$className.php";
-    if (file_exists($path)) {
-        require_once $path;
-        return true;
-    }
-    return false;
-};
 
-spl_autoload_register($autoLoadCore);
-spl_autoload_register($autoLoadController);
-
-
-$app = new App();
+spl_autoload_register($autoLoad);
+$app = new \Core\App();
 $app->run();
