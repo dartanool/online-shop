@@ -40,6 +40,10 @@ class App
             ],
         ],
         '/add-product' => [
+            'GET' =>[
+                'class' => 'CartController',
+                'method'=> 'getCatalog',
+            ],
             'POST' => [
                 'class'=> 'CartController',
                 'method'=> 'addProduct'
@@ -66,7 +70,7 @@ class App
 
     ];
 
-    public function run()
+    public function run() :void
     {
 
         $requestUri = $_SERVER['REQUEST_URI'];
