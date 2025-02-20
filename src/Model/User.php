@@ -1,7 +1,8 @@
 <?php
+namespace Model;
 require_once "../Model/Model.php";
 
-class User extends Model
+class User extends \Model\Model
 {
     public function insertNameEmailPassword(string $name,string $email,string $password) : void
     {

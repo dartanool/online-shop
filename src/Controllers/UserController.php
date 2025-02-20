@@ -16,7 +16,7 @@ class UserController
             $password = password_hash($password, PASSWORD_DEFAULT);
 
             require_once "../Model/User.php";
-            $userModel = new User();
+            $userModel = new \Model\User();
 
             $userModel->insertNameEmailPassword($name, $email, $password);
 
@@ -66,10 +66,9 @@ class UserController
         } elseif (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
             $errors['email'] = "Email {$data['email']} не валиден.";
         } else {
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
             require_once "../Model/User.php";
-            $userModel = new User();
+            $userModel = new \Model\User();
             $statement= $userModel->getByEmail($data['email']);
 
             if (!(empty($statement))) {
@@ -91,10 +90,9 @@ class UserController
             $password = $_POST['password'];
 
             session_start();
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname = mydb', 'user', 'pass');
 
             require_once "../Model/User.php";
-            $userModel = new User();
+            $userModel = new \Model\User();
             $user = $userModel->getByEmail($username);
 
             if ($user === false) {
@@ -147,7 +145,7 @@ class UserController
             header('Location: login');
         } else {
             require_once "../Model/User.php";
-            $userModel = new User();
+            $userModel = new \Model\User();
 
             $user = $userModel->getById($_SESSION['user_id']);
         }
@@ -173,7 +171,7 @@ class UserController
             } else {
 
                 require_once "../Model/User.php";
-                $userModel = new User();
+                $userModel = new \Model\User();
                 $statement= $userModel->getByEmail($data['email']);
 
                 if (!empty($statement)) {
@@ -214,7 +212,7 @@ class UserController
                 $id = $_SESSION['user_id'];
 
                 require_once "../Model/User.php";
-                $userModel = new User();
+                $userModel = new \Model\User();
 
                 if (!(empty($data['name']))) // не пустой => true
                 {
@@ -248,7 +246,7 @@ class UserController
         }
 
         require_once "../Model/User.php";
-        $userModel = new User();
+        $userModel = new \Model\User();
 
         $user = $userModel->getById($_SESSION['user_id']);
 

@@ -1,6 +1,7 @@
 <?php
+namespace Model;
 require_once "../Model/Model.php";
-class Product extends Model
+class Product extends \Model\Model
 {
     public function getById() : array
     {

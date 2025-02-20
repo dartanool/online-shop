@@ -11,7 +11,7 @@ class CartController
         } else {
 
             require_once "../Model/UserProduct.php";
-            $productModel = new UserProduct();
+            $productModel = new \Model\UserProduct();
             $orders = $productModel->getById($_SESSION['user_id']);
 
             $count = 0;
@@ -19,7 +19,7 @@ class CartController
                 $productId = $order['product_id'];
 
                 require_once "../Model/Product.php";
-                $cartModel = new Product();
+                $cartModel = new \Model\Product();
 
                 $products[$count] = $cartModel->getByProductId($productId);
                 $products[$count]['amount'] = $order['amount'];
@@ -41,7 +41,7 @@ class CartController
             $errors['productId'] = "ProductController id incorrect";
         } else {
             require_once "../Model/Product.php";
-            $productModel = new Product();
+            $productModel = new \Model\Product();
 
             $data = $productModel->getByProductId($productId);
 
@@ -75,7 +75,7 @@ class CartController
 
                 require_once "../Model/UserProduct.php";
 
-                $cartModel = new UserProduct();
+                $cartModel = new \Model\UserProduct();
 
                 $data = $cartModel->getByIdProductId($userId, $productId);
 

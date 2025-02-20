@@ -13,7 +13,7 @@ class ProductController
         } else {
 
             require_once "../Model/Product.php";
-            $productModel = new Product();
+            $productModel = new \Model\Product();
             $products = $productModel->getById();
 
             require_once "../Views/catalog_page.php";
