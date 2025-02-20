@@ -1,7 +1,7 @@
 <?php
 require_once "../Model/Model.php";
 
-class UserProduct
+class UserProduct extends Model
 {
     public function getById(int $id) : array
     {
