@@ -1,4 +1,6 @@
 <?php
+namespace Controllers;
+
 class CartController
 {
     //UserProduct
@@ -77,7 +79,7 @@ class CartController
 
                 $cartModel = new \Model\UserProduct();
 
-                $data = $cartModel->getByIdProductId($userId, $productId);
+                $data = $cartModel->getByUserIdProductId($userId, $productId);
 
                 if ($data === false) {
                     $cartModel->insertByIdProductIdAmount($userId, $productId, $amount);

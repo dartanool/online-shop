@@ -13,7 +13,7 @@ class UserProduct extends \Model\Model
         return $orders;
     }
 
-    public function getByIdProductId(int $userId, int $productId) : array | false
+    public function getByUserIdProductId(int $userId, int $productId) : array | false
     {
 
         $statement = $this->pdo->prepare("SELECT * FROM user_products WHERE product_id = :productId AND user_id =:userId");
@@ -36,5 +36,11 @@ class UserProduct extends \Model\Model
 
         $statement = $this->pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id =:userId and product_id = :product_id");
         $statement->execute(['amount' => $amount, 'userId' => $userId, 'product_id' => $productId]);
+    }
+
+    public function deleteByUserId(int $userId)
+    {
+        $statement = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
+        $statement->execute(['userId' => $userId]);
     }
 }
