@@ -35,7 +35,7 @@
             <?php endif;?>
         <label for="text"><b>Комментарий</b></label>
         <div class="input-box">
-            <input type="text" placeholder="Enter your name" id="name" name ="comment" >
+            <input type="text" placeholder="Enter your comment" id="name" name ="comment" >
         </div>
             <?php if(isset($data['comment'])):?>
                 value="<?php echo $data['comment'];?>"

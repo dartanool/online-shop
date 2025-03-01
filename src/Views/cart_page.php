@@ -4,20 +4,27 @@
     <?php foreach ($products as $product):?>
         <div class="product-item">
             <img class="product-image" src="<?php echo $product['image_url']?>" alt="<?php echo $product['name']?>" data-image-width="720" data-image-height="1080">
-            <div class="product-info-title">
-                <h6 class="product-id"> <?php echo 'id'?></h6>
-                <h6 class="product-name"> <?php echo 'name'?></h6>
-                <h6 class="product-amount"> <?php echo 'amount'?></h6>
-                <h5 class="product-price"><?php echo 'Total cost' ?></h5>
-            </div>
-            <div class="product-info">
-                <h6 class="product-id"> <?php echo $product['id']?></h6>
-                <h6 class="product-name"> <?php echo $product['name']?></h6>
-                <h6 class="product-amount"> <?php echo $product['amount']?></h6>
-                <h5 class="product-price"><?php echo $product['price']*$product['amount']   ?></h5>
-            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>amount</th>
+                    <th>Total cost</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo $product['id']?></td>
+                        <td><?php echo $product['name']?></td>
+                        <td> <?php echo $product['amount']?></td>
+                        <td><?php echo $product['price']*$product['amount']?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     <?php endforeach ?>
+
 </div>
 </html>
 
@@ -41,37 +48,38 @@
         object-fit: cover;
     }
 
-    .product-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-    }
-    .product-info-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 100px;
-    }
-
-    .product-id {
-        font-size: 30px;
-    }
-    .product-name {
-        font-size: 30px;
-    }
-    .product-price {
-        font-size: 28px;
-        color: green;
-    }
-    .product-amount {
-        font-size: 28px;
-        color: green;
-    }
-
     @media (max-width: 768px) {
         .product-grid {
             grid-template-columns: 1fr;
         }
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #dddddd;
+
+
+    }
+    th {
+        background-color: #4070f4   ; /* Цвет фона заголовка */
+        color: white; /* Цвет текста заголовка */
+
     }
 </style>
