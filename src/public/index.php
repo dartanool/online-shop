@@ -5,19 +5,13 @@ use Controllers\OrderController;
 use Controllers\ProductController;
 use Controllers\UserController;
 use Core\App;
+use Core\Autoloader;
 
-$autoLoad = function (string $path) {
-    $elem = explode("\\", $path);
-    $path = "../$elem[0]/$elem[1].php";
-    if (file_exists($path)) {
-        require_once $path;
-        return true;
-    }
-    return false;
-};
+require_once './../Core/Autoloader.php';
 
+$path = dirname(__DIR__);
+Autoloader::register($path);
 
-spl_autoload_register($autoLoad);
 $app = new App();
 $app->addRoute('/registration', 'GET',UserController::class,'getRegistrate');
 $app->addRoute('/registration', 'POST',UserController::class,'registrate');
@@ -34,6 +28,5 @@ $app->addRoute('/cart', 'GET',CartController::class,'getCart' );
 $app->addRoute('/create-order', 'GET',OrderController::class,'getCreateForm' );
 $app->addRoute('/create-order', 'POST',OrderController::class,'create' );
 $app->addRoute('/user-orders', 'GET',OrderController::class,'getAllOrders' );
-
 
 $app->run();
