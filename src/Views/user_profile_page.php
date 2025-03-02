@@ -14,7 +14,7 @@
         <img src="https://imdezcode.files.wordpress.com/2020/02/imdezcode-logo.png" alt="" width="100" height="100">
 
         <div class="name">
-            <?php echo $user['name'];?>
+            <?php echo $user->getName();?>
         </div>
     </div>
 
@@ -38,12 +38,12 @@
                 <tr>
                     <td>Name</td>
                     <td>:</td>
-                    <td> <?php echo $user['name'];?></td>
+                    <td> <?php echo $user->getName();?></td>
                 </tr>
                 <tr>
                     <td>Email</td>
                     <td>:</td>
-                    <td> <?php echo $user['email'];?></td>
+                    <td> <?php echo $user->getEmail();?></td>
                 </tr>
 <!--                <tr>-->
 <!--                    <td>Password</td>-->

@@ -71,7 +71,7 @@ class UserController
 
             require_once "../Model/User.php";
             $userModel = new \Model\User();
-            $statement= $userModel->getByEmail($data['email']);
+            $statement = $userModel->getByEmail($data['email']);
 
             if (!(empty($statement))) {
                 $errors['email'] = "Email {$data['email']} already exists";
@@ -99,11 +99,11 @@ class UserController
 
             if ($user === false) {
                 $errors = "username or password incorrect";
-            } elseif ($username === $user['email']) {
-                $passwordDb = $user['password'];
+            } elseif ($username === $user->getEmail()) {
+                $passwordDb = $user->getPassword();
                 if (password_verify($password, $passwordDb)) {
 
-                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['user_id'] = $user->getId();
                     //setcookie('user_id', $user['id']);
                     header("Location: /catalog");
 

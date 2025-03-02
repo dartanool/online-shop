@@ -3,22 +3,33 @@ namespace Model;
 
 class User extends \Model\Model
 {
+    private int $id;
+    private string $name;
+    private string $email;
+    private string $password;
+
     public function insertNameEmailPassword(string $name,string $email,string $password) : void
     {
         $statement = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
         $statement->execute([':name' => $name, ':email' => $email, ':password' => $password]);
     }
-    public function getById(int $id) :array
+    public function getById(int $id) :self | null
     {
 
         $statement = $this->pdo->query("SELECT * FROM users WHERE id = {$id}");
         $user = $statement->fetch();
 
-        return $user;
+        if ($user === false) {
+            return null;
+        }
+
+        $obj = $this->createObject($user);
+
+        return $obj;
     }
 
 
-    public function getByEmail(string $email) : array | false// add false
+    public function getByEmail(string $email) : self | null// add false
     {
 
         $statement = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
@@ -26,7 +37,13 @@ class User extends \Model\Model
 
         $result = $statement->fetch();
 
-        return $result;
+        if ($result === false) {
+            return null;
+        }
+
+        $obj = $this->createObject($result);
+
+        return $obj;
     }
 
     public function updateEmailById(string $email,int $id) : void
@@ -49,4 +66,36 @@ class User extends \Model\Model
         $statement = $this->pdo->prepare("UPDATE users SET password = :password WHERE id = {$id}");
         $statement->execute([':password' => $password]);
     }
+
+    public function createObject(array $data) : self
+    {
+        $obj = new self();
+
+        $obj->id = $data['id'];
+        $obj->name = $data['name'];
+        $obj->email = $data['email'];
+        $obj->password = $data['password'];
+
+        return $obj;
+    }
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
 }
