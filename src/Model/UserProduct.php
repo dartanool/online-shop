@@ -7,6 +7,7 @@ class UserProduct extends \Model\Model
     private int $userId;
     private int $productId;
     private int $amount;
+    private Product $product;
 
     public function getById(int $id) : array | null
     {
@@ -89,5 +90,14 @@ class UserProduct extends \Model\Model
     public function getAmount(): int
     {
         return $this->amount;
+    }
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(Product $product): void
+    {
+        $this->product = $product;
     }
 }

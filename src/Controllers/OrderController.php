@@ -62,10 +62,9 @@ class OrderController
         $newUserOrders = [];
 
         foreach ($userOrders as $userOrder) {
-            $orderProducts = $this->orderProductModel->getAllByOrderId($userOrder['id']);
+            $orderProducts = $this->orderProductModel->getAllByOrderId($userOrder->getId());
             $newOrderProducts = $this->newOrderProducts($orderProducts);
-            $userOrder['total'] = $this->totalOrderProducts($newOrderProducts);
-            $userOrder['products'] = $newOrderProducts;
+            $userOrder->setTotal($this->totalOrderProducts($newOrderProducts));
             $newUserOrders[] = $userOrder;
         }
 
@@ -147,9 +146,9 @@ class OrderController
         foreach ($orderProducts as $orderProduct)
         {
             $product = $this->productModel->getByProductId($orderProduct->getProductId());
-            $orderProduct['name'] = $product['name'];
-            $orderProduct['price'] = $product['price'];
-            $orderProduct['totalSum'] = $orderProduct['amount'] * $orderProduct['price'];
+            $orderProduct->setProduct($product);
+            $totalSum = $orderProduct->getAmount() * $orderProduct->getProduct()->getPrice();
+            $orderProduct->getProduct()->setTotalSum($totalSum);
             $newOrderProducts[] = $orderProduct;
         }
         return $newOrderProducts;
@@ -159,7 +158,7 @@ class OrderController
         $total = 0;
         foreach ($newOrderProducts as $newOrderProduct)
         {
-            $total += $newOrderProduct['totalSum'];
+            $total += $newOrderProduct->getProduct()->getTotalSum();
         }
         return $total;
     }

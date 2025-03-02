@@ -7,6 +7,7 @@ class Product extends \Model\Model
     private int $price;
     private string|null $description;
     private string|null  $image_url;
+    private int $totalSum;
     public function getById() : array | null
     {
 
@@ -25,7 +26,7 @@ class Product extends \Model\Model
         return $objs;
     }
 
-    public function getByProductId(int $productId) : array | false
+    public function getByProductId(int $productId) : self | null
     {
 
         $statement = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
@@ -33,7 +34,10 @@ class Product extends \Model\Model
 
         $data = $statement->fetch();
 
-        return $data;
+        if ($data === false){
+            return null;
+        }
+        return $this->createObject($data);
     }
 
     private function createObject(array $data) : self
@@ -74,5 +78,13 @@ class Product extends \Model\Model
         return $this->image_url;
     }
 
+    public function setTotalSum(int $totalSum): void
+    {
+        $this->totalSum = $totalSum;
+    }
 
+    public function getTotalSum(): int
+    {
+        return $this->totalSum;
+    }
 }

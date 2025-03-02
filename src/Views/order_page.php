@@ -42,16 +42,16 @@
             <?php endif;?>
         <div class="wrapper">
             <?php foreach ($newOrderProducts as $newOrderProduct): ?>
-                <h3><?php echo $newOrderProduct['name']?></h3>
+                <h3><?php echo $newOrderProduct->getProduct()->getName()?></h3>
                 <label for="amount">Количество:</label>
-                <input type="number" id="amount" name="amount" min="1" value=<?php echo $newOrderProduct['amount']?> required>
+                <input type="number" id="amount" name="amount" min="1" value=<?php echo $newOrderProduct->getAmount()?> required>
                 <div>
                     <label for="amount">Стоимость за 1 шт:</label>
-                    <label class="price">₽ <?php echo $newOrderProduct['price']?></>
+                    <label class="price">₽ <?php echo $newOrderProduct->getProduct()->getPrice()?></>
                 </div>
                 <div>
                     <label for="totalProduct">Итого:</label>
-                    <label class="price">₽ <?php echo $newOrderProduct['totalSum'];?></label>
+                    <label class="price">₽ <?php echo $newOrderProduct->getProduct()->getTotalSum();?></label>
                 </div>
             <?php endforeach; ?>
             <h3><label for="totalOrder">Заказ на сумму:</label></h3>
