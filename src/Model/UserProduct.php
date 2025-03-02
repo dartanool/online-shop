@@ -3,14 +3,30 @@ namespace Model;
 
 class UserProduct extends \Model\Model
 {
-    public function getById(int $id) : array
+    private int $id;
+    private int $userId;
+    private int $productId;
+    private int $amount;
+
+    public function getById(int $id) : array | null
     {
 
         $statement = $this->pdo->query("SELECT * FROM user_products WHERE user_id = {$id}");
 
         $orders = $statement->fetchAll();
 
-        return $orders;
+        if ($orders === false) {
+            return null;
+        }
+
+        $objs = [];
+
+        foreach ($orders as $order) {
+            $obj = $this->createObject($order);
+            $objs[] = $obj;
+        }
+
+        return $objs;
     }
 
     public function getByUserIdProductId(int $userId, int $productId) : array | false
@@ -42,5 +58,36 @@ class UserProduct extends \Model\Model
     {
         $statement = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
         $statement->execute(['userId' => $userId]);
+    }
+
+    private function createObject(array $data) : UserProduct
+    {
+        $obj = new self();
+
+        $obj->id = $data['id'];
+        $obj->userId = $data['user_id'];
+        $obj->productId = $data['product_id'];
+        $obj->amount = $data['amount'];
+
+        return $obj;
+    }
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    public function getProductId(): int
+    {
+        return $this->productId;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
     }
 }

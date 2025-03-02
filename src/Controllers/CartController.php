@@ -18,13 +18,13 @@ class CartController
 
             $count = 0;
             foreach ($orders as $order) {
-                $productId = $order['product_id'];
+                $productId = $order->getProductId();
 
                 require_once "../Model/Product.php";
                 $cartModel = new \Model\Product();
 
                 $products[$count] = $cartModel->getByProductId($productId);
-                $products[$count]['amount'] = $order['amount'];
+                $products[$count]['amount'] = $order->getAmount();
                 $count++;
             }
 

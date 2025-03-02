@@ -95,7 +95,7 @@ class OrderController
 
             foreach ($orderProducts as $orderProduct)
             {
-                $this->orderProductModel->create($orderId, $orderProduct['product_id'], $orderProduct['amount']);
+                $this->orderProductModel->create($orderId, $orderProduct->getProductId(), $orderProduct->getAmount());
             }
             $this->userProductModel->deleteByUserId($userId);
             header('Location: /user-orders');
@@ -146,7 +146,7 @@ class OrderController
         $newOrderProducts = [];
         foreach ($orderProducts as $orderProduct)
         {
-            $product = $this->productModel->getByProductId($orderProduct['product_id']);
+            $product = $this->productModel->getByProductId($orderProduct->getProductId());
             $orderProduct['name'] = $product['name'];
             $orderProduct['price'] = $product['price'];
             $orderProduct['totalSum'] = $orderProduct['amount'] * $orderProduct['price'];
