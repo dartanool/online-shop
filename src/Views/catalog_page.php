@@ -6,15 +6,15 @@
 <div class="product-grid">
     <?php foreach ($products as $product):?>
         <div class="product-item">
-            <img class="product-image" src="<?php echo $product['image_url']?>" alt="<?php echo $product['name']?>" data-image-width="720" data-image-height="1080">
+            <img class="product-image" src="<?php echo $product->getImageUrl()?>" alt="<?php echo $product->getName()?>" data-image-width="720" data-image-height="1080">
             <div class="product-info">
-                <h6 class="product-name"> <?php echo $product['id']?></h6>
-                <h6 class="product-name"> <?php echo $product['name']?></h6>
-                <h5 class="product-price"><?php echo $product['price']?></h5>
+                <h6 class="product-name"> <?php echo $product->getId()?></h6>
+                <h6 class="product-name"> <?php echo $product->getName()?></h6>
+                <h5 class="product-price"><?php echo $product->getPrice()?></h5>
             </div>
             <form action= "/add-product" method="post">
                 <div class="input-box">
-                    <input type="hidden" placeholder="Enter product id" value="<?php echo $product['id']?>" name ="product_id" required>
+                    <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
                 <label for="amount"><b>Amount</b></label>
                 <?php if (isset($errors['amount'])): ?>
