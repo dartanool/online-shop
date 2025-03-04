@@ -124,18 +124,31 @@ class App
     }
 
 
-    public function addRoute(string $requestUri, string $routeMethod, string $class, string $method):void
+//    public function addRoute(string $requestUri, string $routeMethod, string $class, string $method):void
+//    {
+//
+//        $this->routes[$requestUri][$routeMethod] = [
+//            'class' => $class,
+//            'method' => $method,
+//        ];
+//
+//    }
+
+    public function get(string $requestUri, string $class, string $method):void
     {
 
-//        $this->routes[$requestUri] = $requestUri;
-//        $this->routes[$requestUri][$routeMethod] = $routeMethod;
-//        $this->routes[$requestUri][$routeMethod]['class'] = $class;
-//        $this->routes[$requestUri][$routeMethod]['method'] = $method;
-
-        $this->routes[$requestUri][$routeMethod] = [
+        $this->routes[$requestUri]['GET'] = [
             'class' => $class,
             'method' => $method,
         ];
+    }
 
+    public function post(string $requestUri, string $class, string $method):void
+    {
+
+        $this->routes[$requestUri]['POST'] = [
+            'class' => $class,
+            'method' => $method,
+        ];
     }
 }
