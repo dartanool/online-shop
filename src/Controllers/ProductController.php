@@ -1,9 +1,16 @@
 <?php
 namespace Controllers;
 
+use Model\Product;
+
 class ProductController
 {
+    private Product $productModel;
 
+    public function __construct()
+    {
+        $this->productModel = new Product();
+    }
     //Catalog
     public function getCatalog() : void
     {
@@ -13,9 +20,7 @@ class ProductController
             header('Location: login');
         } else {
 
-            require_once "../Model/Product.php";
-            $productModel = new \Model\Product();
-            $products = $productModel->getById();
+            $products = $this->productModel->getById();
 
             require_once "../Views/catalog_page.php";
         }

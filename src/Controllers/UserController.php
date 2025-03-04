@@ -1,9 +1,20 @@
 <?php
 namespace Controllers;
 
+use Model\Order;
+use Model\User;
+use Model\OrderProduct;
+use Model\Product;
+use Model\UserProduct;
+
 class UserController
 {
 
+    private User $userModel;
+    public function __construct()
+    {
+        $this->userModel = new User();
+    }
     //Registration
     public function registrate() :void
     {
@@ -17,13 +28,9 @@ class UserController
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            require_once "../Model/User.php";
-            $userModel = new \Model\User();
-
-            $userModel->insertNameEmailPassword($name, $email, $password);
+            $this->userModel->insertNameEmailPassword($name, $email, $password);
 
 //            $result = $userModel->getByEmail($email);
-
         }
         require_once '../Views/registration_form.php';
 
@@ -69,9 +76,7 @@ class UserController
             $errors['email'] = "Email {$data['email']} не валиден.";
         } else {
 
-            require_once "../Model/User.php";
-            $userModel = new \Model\User();
-            $statement = $userModel->getByEmail($data['email']);
+            $statement = $this->userModel->getByEmail($data['email']);
 
             if (!(empty($statement))) {
                 $errors['email'] = "Email {$data['email']} already exists";
@@ -93,9 +98,7 @@ class UserController
 
             session_start();
 
-            require_once "../Model/User.php";
-            $userModel = new \Model\User();
-            $user = $userModel->getByEmail($username);
+            $user = $this->userModel->getByEmail($username);
 
             if ($user === false) {
                 $errors = "username or password incorrect";
@@ -146,10 +149,8 @@ class UserController
         if (!(isset($_SESSION['user_id']))) {
             header('Location: login');
         } else {
-            require_once "../Model/User.php";
-            $userModel = new \Model\User();
 
-            $user = $userModel->getById($_SESSION['user_id']);
+            $user = $this->userModel->getById($_SESSION['user_id']);
         }
         require_once '../Views/user_profile_page.php';
     }
@@ -172,9 +173,7 @@ class UserController
                 $errors['email'] = "Email {$data['email']} не валиден.";
             } else {
 
-                require_once "../Model/User.php";
-                $userModel = new \Model\User();
-                $statement= $userModel->getByEmail($data['email']);
+                $statement= $this->userModel->getByEmail($data['email']);
 
                 if (!empty($statement)) {
                     $errors['email'] = "Email {$data['email']} already exists";
@@ -203,7 +202,7 @@ class UserController
         session_start();
 
         if (!(isset($_SESSION['user_id']))) {
-            header('Location: login_form.php');
+            header('Location: login');
         } else {
             $data = $_POST;
 
@@ -213,29 +212,28 @@ class UserController
             {
                 $id = $_SESSION['user_id'];
 
-                require_once "../Model/User.php";
-                $userModel = new \Model\User();
-
                 if (!(empty($data['name']))) // не пустой => true
                 {
                     $name = $_POST['name'];
-                    $userModel->updateNameById($name, $id);
+                    $this->userModel->updateNameById($name, $id);
 
                 }
 
                 if (!(empty($data['email']))) {
                     $email = $_POST['email'];
-                    $userModel->updateEmailById($email, $id);
+                    $this->userModel->updateEmailById($email, $id);
                 }
 
                 if (!(empty($data['password']))) {
                     $password = $_POST['password'];
-                    $userModel->updatePasswordById($password, $id);
+                    $this->userModel->updatePasswordById($password, $id);
                 }
+                header('Location: /user-profile');
+                exit;
             }
-            header('Location: /user-profile');
-            exit;
+
         }
+        $user = $this->userModel->getById($_SESSION['user_id']);
         require_once '../Views/edit_user_profile_form.php';
     }
 
@@ -247,10 +245,7 @@ class UserController
             header('Location: /login');
         }
 
-        require_once "../Model/User.php";
-        $userModel = new \Model\User();
-
-        $user = $userModel->getById($_SESSION['user_id']);
+        $user = $this->userModel->getById($_SESSION['user_id']);
 
         require_once '../Views/edit_user_profile_form.php';
     }

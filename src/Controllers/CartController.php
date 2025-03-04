@@ -1,8 +1,21 @@
 <?php
 namespace Controllers;
 
+use Model\Product;
+use Model\User;
+use Model\UserProduct;
+
 class CartController
 {
+    private Product $productModel;
+    private UserProduct $userProductModel;
+
+    public function __construct()
+    {
+        $this->userProductModel = new UserProduct();
+        $this->productModel = new Product();
+    }
+
     //UserProduct
     public function getCart() : void
     {
@@ -12,20 +25,15 @@ class CartController
             header('Location: login');
         } else {
 
-            require_once "../Model/UserProduct.php";
-            $productModel = new \Model\UserProduct();
-            $orders = $productModel->getById($_SESSION['user_id']);
+            $userId = $_SESSION['user_id'];
 
-            $count = 0;
-            foreach ($orders as $order) {
-                $productId = $order->getProductId();
-
-                require_once "../Model/Product.php";
-                $cartModel = new \Model\Product();
-
-                $products[$count] = $cartModel->getByProductId($productId);
-                $products[$count]['amount'] = $order->getAmount();
-                $count++;
+            $userProducts = $this->userProductModel->getById($userId);
+            $newUserProducts = [];
+            foreach ($userProducts as $userProduct)
+            {
+                $product = $this->productModel->getByProductId($userProduct->getProductId());
+                $userProduct->setProduct($product);
+                $newUserProducts[] = $userProduct;
             }
 
             require_once "../Views/cart_page.php";
@@ -42,10 +50,8 @@ class CartController
         if (!isset($productId)) {
             $errors['productId'] = "ProductController id incorrect";
         } else {
-            require_once "../Model/Product.php";
-            $productModel = new \Model\Product();
 
-            $data = $productModel->getByProductId($productId);
+            $data = $this->productModel->getByProductId($productId);
 
             if ($data === false) {
                 $errors['productId'] = "ProductController doesn't exist";
@@ -75,18 +81,14 @@ class CartController
                 $productId = $_POST['product_id'];
                 $amount = $_POST['amount'];
 
-                require_once "../Model/UserProduct.php";
-
-                $cartModel = new \Model\UserProduct();
-
-                $data = $cartModel->getByUserIdProductId($userId, $productId);
+                $data = $this->userProductModel->getByUserIdProductId($userId, $productId);
 
                 if ($data === false) {
-                    $cartModel->insertByIdProductIdAmount($userId, $productId, $amount);
+                    $this->userProductModel->insertByIdProductIdAmount($userId, $productId, $amount);
                 } else {
                     $amount = $data['amount'] + $amount;
                     // update
-                    $cartModel->updateByIdProductIdAmount($userId, $productId, $amount);
+                    $this->userProductModel->updateByIdProductIdAmount($userId, $productId, $amount);
                 }
 
 

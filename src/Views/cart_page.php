@@ -1,13 +1,12 @@
 <html lang="en" dir="ltr">
 <h2>Cart</h2>
 <div class="product-grid">
-    <?php foreach ($products as $product):?>
+    <?php foreach ($newUserProducts as $newUserProduct):?>
         <div class="product-item">
-            <img class="product-image" src="<?php echo $product['image_url']?>" alt="<?php echo $product['name']?>" data-image-width="720" data-image-height="1080">
+            <img class="product-image" src="<?php echo $newUserProduct->getProduct()->getImageUrl()?>" alt="<?php echo $newUserProduct->getProduct()->getName()?>" data-image-width="720" data-image-height="1080">
             <table>
                 <thead>
                 <tr>
-                    <th>id</th>
                     <th>name</th>
                     <th>amount</th>
                     <th>Total cost</th>
@@ -15,10 +14,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><?php echo $product['id']?></td>
-                        <td><?php echo $product['name']?></td>
-                        <td> <?php echo $product['amount']?></td>
-                        <td><?php echo $product['price']*$product['amount']?></td>
+                        <td><?php echo $newUserProduct->getProduct()->getName()?></td>
+                        <td> <?php echo $newUserProduct->getAmount()?></td>
+                        <td><?php echo  ($newUserProduct->getProduct()->getPrice())*($newUserProduct->getAmount())?></td>
                     </tr>
                 </tbody>
             </table>
