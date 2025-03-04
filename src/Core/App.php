@@ -123,17 +123,6 @@ class App
         }
     }
 
-
-//    public function addRoute(string $requestUri, string $routeMethod, string $class, string $method):void
-//    {
-//
-//        $this->routes[$requestUri][$routeMethod] = [
-//            'class' => $class,
-//            'method' => $method,
-//        ];
-//
-//    }
-
     public function get(string $requestUri, string $class, string $method):void
     {
 
