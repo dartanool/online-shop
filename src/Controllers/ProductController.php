@@ -11,18 +11,19 @@ class ProductController extends BaseController
 
     public function __construct()
     {
+        parent::__construct();
         $this->productModel = new Product();
         $this->userProductModel = new UserProduct();
     }
     //Catalog
     public function getCatalog() : void
     {
-        if (!($this->check())) {
+        if (!($this->authService->check())) {
             header('Location: login');
         } else {
 
             $products = $this->productModel->getById();
-            $userProduct =$this->userProductModel->getById($this->check());
+            $userProduct =$this->userProductModel->getAllUserProductsByUserId($this->authService->check());
 
             require_once "../Views/catalog_page.php";
         }

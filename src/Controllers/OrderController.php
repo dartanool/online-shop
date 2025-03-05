@@ -16,6 +16,7 @@ class OrderController extends BaseController
     private Order $orderModel;
     public function __construct()
     {
+        parent::__construct();
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
@@ -24,9 +25,9 @@ class OrderController extends BaseController
 
     public function getCreateForm()  //форма order если моя корзина не пустая
     {
-        if ($this->check()) {
-            $userId = $this->getCurrentUserId();
-            $orderProducts = $this->userProductModel->getById($userId);
+        if ($this->authService->check()) {
+            $user = $this->authService->getCurrentUser();
+            $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
 
             if(empty($orderProducts))
             {
@@ -43,13 +44,13 @@ class OrderController extends BaseController
     }
     public function getAllOrders()
     {
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: /login');
             exit();
         }
-        $userId = $this->getCurrentUserId();
+        $user = $this->authService->getCurrentUser();
 
-        $userOrders = $this->orderModel->getAllByUserId($userId);
+        $userOrders = $this->orderModel->getAllByUserId($user->getId());
 
         $newUserOrders = [];
 
@@ -64,28 +65,28 @@ class OrderController extends BaseController
     }
     public function create()
     {
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: /login');
             exit();
         }
 
         $data = $_POST;
         $errors = $this->validate($data);
-        $userId = $this->getCurrentUserId();
-        $orderProducts = $this->userProductModel->getById($userId);
+        $user = $this->authService->getCurrentUser();
+        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
         $newOrderProducts = $this->newOrderProducts($orderProducts);
         $total = $this->totalOrderProducts($newOrderProducts);
 
         if (empty($errors)) {
-            $userId = $this->getCurrentUserId();
+            $user = $this->authService->getCurrentUser();
 
-            $orderId = $this->orderModel->create($data, $userId);
+            $orderId = $this->orderModel->create($data, $user->getId());
 
             foreach ($orderProducts as $orderProduct)
             {
                 $this->orderProductModel->create($orderId, $orderProduct->getProductId(), $orderProduct->getAmount());
             }
-            $this->userProductModel->deleteByUserId($userId);
+            $this->userProductModel->deleteByUserId($user->getId());
             header('Location: /user-orders');
             exit();
         }else{

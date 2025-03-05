@@ -9,7 +9,7 @@ class UserProduct extends \Model\Model
     private int $amount;
     private Product $product;
 
-    public function getById(int $id) : array | null
+    public function getAllUserProductsByUserId(int $id) : array | null
     {
 
         $statement = $this->pdo->query("SELECT * FROM user_products WHERE user_id = {$id}");

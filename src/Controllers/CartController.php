@@ -2,7 +2,6 @@
 namespace Controllers;
 
 use Model\Product;
-use Model\User;
 use Model\UserProduct;
 
 class CartController extends BaseController
@@ -21,13 +20,13 @@ class CartController extends BaseController
     public function getCart() : void
     {
 
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: login');
         } else {
 
-            $userId = $this->getCurrentUserId();
+            $user = $this->authService->getCurrentUser();
 
-            $userProducts = $this->userProductModel->getById($userId);
+            $userProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
             $newUserProducts = [];
             foreach ($userProducts as $userProduct)
             {
@@ -69,23 +68,23 @@ class CartController extends BaseController
     // Add and delete 1 product, if amount !=0
     public function addProduct() : void
     {
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: login');
         } else {
 
-            $userId = $this->getCurrentUserId();
+            $user = $this->authService->getCurrentUser();
             $productId = $_POST['product_id'];
             $amount = 1;
 
-            $data = $this->userProductModel->getByUserIdProductId($userId, $productId);
+            $data = $this->userProductModel->getByUserIdProductId($user->getId(), $productId);
 
             if (!isset($data)) {
-                $this->userProductModel->insertByIdProductIdAmount($userId, $productId, $amount);
+                $this->userProductModel->insertByIdProductIdAmount($user->getId(), $productId, $amount);
             } else {
 //                $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount() + $amount;
                 $amount = $data->getAmount() + $amount;
                 // update
-                $this->userProductModel->updateAmountByUserIdProductId($userId, $productId, $amount);
+                $this->userProductModel->updateAmountByUserIdProductId($user->getId(), $productId, $amount);
             }
 
             header("Location: catalog");
@@ -94,21 +93,21 @@ class CartController extends BaseController
 
     public function decreaseProduct() : void
     {
-        if (!$this->check()){
+        if (!$this->authService->check()){
             header('Location: login');
         } else {
-            $userId = $this->getCurrentUserId();
+            $user = $this->authService->getCurrentUser();
             $productId = $_POST['product_id'];
 
-            $data = $this->userProductModel->getByUserIdProductId($userId, $productId);
+            $data = $this->userProductModel->getByUserIdProductId($user->getId(), $productId);
             $amount = $data->getAmount();
 
 
             if ($amount === 1) {
-                $this->userProductModel->decreaseByUserIdProductId($userId, $productId);
+                $this->userProductModel->decreaseByUserIdProductId($user->getId(), $productId);
             }  else {
                 $amount = $amount = $data->getAmount() -1;
-                $this->userProductModel->updateAmountByUserIdProductId($userId, $productId, $amount);
+                $this->userProductModel->updateAmountByUserIdProductId($user->getId(), $productId, $amount);
             }
 
             header("Location: catalog");

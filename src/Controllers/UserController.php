@@ -5,8 +5,15 @@ use Model\User;
 
 class UserController extends BaseController
 {
+    protected User $userModel;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userModel = new User();
 
-   //Registration
+    }
+
+    //Registration
     public function registrate() :void
     {
         $data = $_POST;
@@ -28,8 +35,11 @@ class UserController extends BaseController
 
     public function getRegistrate() : void
     {
-        if ($this->check()) {
-            header('Location: /catalog');
+        if ($this->authService->check()) {
+            require '../Views/registration_form.php';
+
+//            header('Location: /catalog');
+            exit();
         }
         require '../Views/registration_form.php';
     }
@@ -82,12 +92,11 @@ class UserController extends BaseController
         $errors = $this->validateLogin($_POST);
 
         if (empty($errors)) {
-            $result = $this->auth($_POST['username'], $_POST['password']);
+            $result = $this->authService->auth($_POST['username'], $_POST['password']);
 
-            if ($result)
-            {
+            if ($result) {
                 header("Location: /catalog");
-
+                exit;
             } else {
                 $errors = "username or password incorrect";
 
@@ -111,7 +120,7 @@ class UserController extends BaseController
 
     public function getLogin()
     {
-        if ($this->check()) {
+        if ($this->authService->check()) {
             header('Location: /catalog');
         }
         require_once '../Views/login_form.php';
@@ -120,11 +129,12 @@ class UserController extends BaseController
 //User_profile
     public function getProfile()
     {
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: login');
         } else {
 
-            $user = $this->userModel->getById($this->getCurrentUserId());
+            $userId = $this->authService->getCurrentUser()->getId();
+            $user = $this->userModel->getById($userId);
         }
         require_once '../Views/user_profile_page.php';
     }
@@ -173,7 +183,7 @@ class UserController extends BaseController
 
     public function editProfile() : void
     {
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: login');
         } else {
             $data = $_POST;
@@ -182,41 +192,42 @@ class UserController extends BaseController
 
             if (empty($errors)) //(!(isset($errors))) // или лучше empty  //  нет ошибок, массив пуст => true
             {
-                $id = $this->getCurrentUserId();
+                $user = $this->authService->getCurrentUser();
 
                 if (!(empty($data['name']))) // не пустой => true
                 {
                     $name = $_POST['name'];
-                    $this->userModel->updateNameById($name, $id);
+                    $this->userModel->updateNameById($name, $user->getId());
 
                 }
 
                 if (!(empty($data['email']))) {
                     $email = $_POST['email'];
-                    $this->userModel->updateEmailById($email, $id);
+                    $this->userModel->updateEmailById($email, $user->getId());
                 }
 
                 if (!(empty($data['password']))) {
                     $password = $_POST['password'];
-                    $this->userModel->updatePasswordById($password, $id);
+                    $this->userModel->updatePasswordById($password, $user->getId());
                 }
                 header('Location: /user-profile');
                 exit;
             }
 
         }
-        $user = $this->userModel->getById($this->getCurrentUserId());
+        $userId = $this->authService->getCurrentUser()->getId();
+        $user = $this->userModel->getById($userId);
         require_once '../Views/edit_user_profile_form.php';
     }
 
 
     public function getEditProfile() : void
     {
-        if (!$this->check()) {
+        if (!$this->authService->check()) {
             header('Location: /login');
         }
 
-        $user = $this->userModel->getById($this->getCurrentUserId());
+        $user = $this->userModel->getById($this->authService->getCurrentUser()->getId());
 
         require_once '../Views/edit_user_profile_form.php';
     }
@@ -225,9 +236,8 @@ class UserController extends BaseController
 
     public function logout(): void
     {
-        if ($this->check()) {
-            session_destroy();
-            header('Location: /login');
-        }
+        parent::logout();
+        header('Location: /login');
+        exit();
     }
 }
