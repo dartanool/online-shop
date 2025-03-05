@@ -8,7 +8,7 @@ use Model\OrderProduct;
 use Model\Product;
 
 
-class OrderController
+class OrderController extends BaseController
 {
     private UserProduct $userProductModel;
     private Product $productModel;
@@ -24,13 +24,8 @@ class OrderController
 
     public function getCreateForm()  //форма order если моя корзина не пустая
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-
-        if (isset($_SESSION['user_id'])) {
-            $userId = $_SESSION['user_id'];
+        if ($this->check()) {
+            $userId = $this->getCurrentUserId();
             $orderProducts = $this->userProductModel->getById($userId);
 
             if(empty($orderProducts))
@@ -48,14 +43,11 @@ class OrderController
     }
     public function getAllOrders()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id'])) {
+        if (!$this->check()) {
             header('Location: /login');
             exit();
         }
-        $userId = $_SESSION['user_id'];
+        $userId = $this->getCurrentUserId();
 
         $userOrders = $this->orderModel->getAllByUserId($userId);
 
@@ -72,23 +64,20 @@ class OrderController
     }
     public function create()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id'])) {
+        if (!$this->check()) {
             header('Location: /login');
             exit();
         }
 
         $data = $_POST;
         $errors = $this->validate($data);
-        $userId = $_SESSION['user_id'];
+        $userId = $this->getCurrentUserId();
         $orderProducts = $this->userProductModel->getById($userId);
         $newOrderProducts = $this->newOrderProducts($orderProducts);
         $total = $this->totalOrderProducts($newOrderProducts);
 
         if (empty($errors)) {
-            $userId = $_SESSION['user_id'];
+            $userId = $this->getCurrentUserId();
 
             $orderId = $this->orderModel->create($data, $userId);
 

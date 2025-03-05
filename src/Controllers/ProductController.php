@@ -3,7 +3,7 @@ namespace Controllers;
 
 use Model\Product;
 
-class ProductController
+class ProductController extends BaseController
 {
     private Product $productModel;
 
@@ -14,9 +14,7 @@ class ProductController
     //Catalog
     public function getCatalog() : void
     {
-        session_start();
-
-        if (!(isset($_SESSION['user_id']))) {
+        if (!($this->check())) {
             header('Location: login');
         } else {
 

@@ -5,7 +5,7 @@ use Model\Product;
 use Model\User;
 use Model\UserProduct;
 
-class CartController
+class CartController extends BaseController
 {
     private Product $productModel;
     private UserProduct $userProductModel;
@@ -19,13 +19,12 @@ class CartController
     //UserProduct
     public function getCart() : void
     {
-        session_start();
 
-        if (!(isset($_SESSION['user_id']))) {
+        if (!$this->check()) {
             header('Location: login');
         } else {
 
-            $userId = $_SESSION['user_id'];
+            $userId = $this->getCurrentUserId();
 
             $userProducts = $this->userProductModel->getById($userId);
             $newUserProducts = [];
@@ -67,9 +66,7 @@ class CartController
 
     public function addProduct() : void
     {
-        session_start();
-
-        if (!(isset($_SESSION['user_id']))) {
+        if (!$this->check()) {
             header('Location: login');
         } else {
 
@@ -77,7 +74,7 @@ class CartController
             $errors = $this->validateAddProduct($data);
 
             if (empty($errors)) {
-                $userId = $_SESSION['user_id'];
+                $userId = $this->getCurrentUserId();
                 $productId = $_POST['product_id'];
                 $amount = $_POST['amount'];
 

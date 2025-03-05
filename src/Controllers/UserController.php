@@ -1,21 +1,12 @@
 <?php
 namespace Controllers;
 
-use Model\Order;
 use Model\User;
-use Model\OrderProduct;
-use Model\Product;
-use Model\UserProduct;
 
-class UserController
+class UserController extends BaseController
 {
 
-    private User $userModel;
-    public function __construct()
-    {
-        $this->userModel = new User();
-    }
-    //Registration
+   //Registration
     public function registrate() :void
     {
         $data = $_POST;
@@ -30,7 +21,6 @@ class UserController
 
             $this->userModel->insertNameEmailPassword($name, $email, $password);
 
-//            $result = $userModel->getByEmail($email);
         }
         require_once '../Views/registration_form.php';
 
@@ -38,8 +28,7 @@ class UserController
 
     public function getRegistrate() : void
     {
-        session_status();
-        if (isset($_SESSION['user_id'])) {
+        if ($this->check()) {
             header('Location: /catalog');
         }
         require '../Views/registration_form.php';
@@ -93,28 +82,15 @@ class UserController
         $errors = $this->validateLogin($_POST);
 
         if (empty($errors)) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
+            $result = $this->auth($_POST['username'], $_POST['password']);
 
-            session_start();
+            if ($result)
+            {
+                header("Location: /catalog");
 
-            $user = $this->userModel->getByEmail($username);
-
-            if ($user === false) {
-                $errors = "username or password incorrect";
-            } elseif ($username === $user->getEmail()) {
-                $passwordDb = $user->getPassword();
-                if (password_verify($password, $passwordDb)) {
-
-                    $_SESSION['user_id'] = $user->getId();
-                    //setcookie('user_id', $user['id']);
-                    header("Location: /catalog");
-
-                } else {
-                    $errors = "username or password incorrect";
-                }
             } else {
                 $errors = "username or password incorrect";
+
             }
         }
         require_once '../Views/login_form.php';
@@ -135,8 +111,7 @@ class UserController
 
     public function getLogin()
     {
-        session_status();
-        if (isset($_SESSION['user_id'])) {
+        if ($this->check()) {
             header('Location: /catalog');
         }
         require_once '../Views/login_form.php';
@@ -145,12 +120,11 @@ class UserController
 //User_profile
     public function getProfile()
     {
-        session_start();
-        if (!(isset($_SESSION['user_id']))) {
+        if (!$this->check()) {
             header('Location: login');
         } else {
 
-            $user = $this->userModel->getById($_SESSION['user_id']);
+            $user = $this->userModel->getById($this->getCurrentUserId());
         }
         require_once '../Views/user_profile_page.php';
     }
@@ -199,9 +173,7 @@ class UserController
 
     public function editProfile() : void
     {
-        session_start();
-
-        if (!(isset($_SESSION['user_id']))) {
+        if (!$this->check()) {
             header('Location: login');
         } else {
             $data = $_POST;
@@ -210,7 +182,7 @@ class UserController
 
             if (empty($errors)) //(!(isset($errors))) // или лучше empty  //  нет ошибок, массив пуст => true
             {
-                $id = $_SESSION['user_id'];
+                $id = $this->getCurrentUserId();
 
                 if (!(empty($data['name']))) // не пустой => true
                 {
@@ -233,19 +205,18 @@ class UserController
             }
 
         }
-        $user = $this->userModel->getById($_SESSION['user_id']);
+        $user = $this->userModel->getById($this->getCurrentUserId());
         require_once '../Views/edit_user_profile_form.php';
     }
 
 
     public function getEditProfile() : void
     {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
+        if (!$this->check()) {
             header('Location: /login');
         }
 
-        $user = $this->userModel->getById($_SESSION['user_id']);
+        $user = $this->userModel->getById($this->getCurrentUserId());
 
         require_once '../Views/edit_user_profile_form.php';
     }
@@ -254,8 +225,7 @@ class UserController
 
     public function logout(): void
     {
-        session_start();
-        if (isset($_SESSION['user_id'])) {
+        if ($this->check()) {
             session_destroy();
             header('Location: /login');
         }
