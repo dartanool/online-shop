@@ -26,7 +26,7 @@ $app->get('/catalog', ProductController::class,'getCatalog');
 $app->get('/logout', UserController::class,'logout' );
 $app->get('/cart', CartController::class,'getCart' );
 $app->get('/create-order',OrderController::class,'getCreateForm' );
-$app->post('/create-order',OrderController::class,'create' );
 $app->get('/user-orders', OrderController::class,'getAllOrders' );
+$app->post('/decrease-product',CartController::class,'decreaseProduct' );
 
 $app->run();

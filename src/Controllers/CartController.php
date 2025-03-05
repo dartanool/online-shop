@@ -12,6 +12,7 @@ class CartController extends BaseController
 
     public function __construct()
     {
+        parent::__construct();
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
     }
@@ -64,34 +65,54 @@ class CartController extends BaseController
         return $errors;
     }
 
+
+    // Add and delete 1 product, if amount !=0
     public function addProduct() : void
     {
         if (!$this->check()) {
             header('Location: login');
         } else {
 
-            $data = $_POST;
-            $errors = $this->validateAddProduct($data);
+            $userId = $this->getCurrentUserId();
+            $productId = $_POST['product_id'];
+            $amount = 1;
 
-            if (empty($errors)) {
-                $userId = $this->getCurrentUserId();
-                $productId = $_POST['product_id'];
-                $amount = $_POST['amount'];
+            $data = $this->userProductModel->getByUserIdProductId($userId, $productId);
 
-                $data = $this->userProductModel->getByUserIdProductId($userId, $productId);
-
-                if ($data === false) {
-                    $this->userProductModel->insertByIdProductIdAmount($userId, $productId, $amount);
-                } else {
-                    $amount = $data['amount'] + $amount;
-                    // update
-                    $this->userProductModel->updateByIdProductIdAmount($userId, $productId, $amount);
-                }
-
-
+            if (!isset($data)) {
+                $this->userProductModel->insertByIdProductIdAmount($userId, $productId, $amount);
+            } else {
+//                $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount() + $amount;
+                $amount = $data->getAmount() + $amount;
+                // update
+                $this->userProductModel->updateAmountByUserIdProductId($userId, $productId, $amount);
             }
+
             header("Location: catalog");
-//            require_once "./Views/catalog_page.php";
+        }
+    }
+
+    public function decreaseProduct() : void
+    {
+        if (!$this->check()){
+            header('Location: login');
+        } else {
+            $userId = $this->getCurrentUserId();
+            $productId = $_POST['product_id'];
+
+            $data = $this->userProductModel->getByUserIdProductId($userId, $productId);
+            $amount = $data->getAmount();
+
+
+            if ($amount === 1) {
+                $this->userProductModel->decreaseByUserIdProductId($userId, $productId);
+            }  else {
+                $amount = $amount = $data->getAmount() -1;
+                $this->userProductModel->updateAmountByUserIdProductId($userId, $productId, $amount);
+            }
+
+            header("Location: catalog");
+
         }
     }
 }

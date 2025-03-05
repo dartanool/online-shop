@@ -12,16 +12,23 @@
                 <h6 class="product-name"> <?php echo $product->getName()?></h6>
                 <h5 class="product-price"><?php echo $product->getPrice()?></h5>
             </div>
+            <label for="amount"><b>Amount</b></label>
             <form action= "/add-product" method="post">
                 <div class="input-box">
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
-                <label for="amount"><b>Amount</b></label>
+                    <button type="Submit" class="input-box button">+</button>
+
                 <?php if (isset($errors['amount'])): ?>
-                    <label style="color: red"><?php echo $errors['amount'];?></label>
+                    <label style="color: red"><?php echo $product->getId();?></label>
                 <?php endif; ?>
-                    <input type="text" placeholder="Enter your amount" name ="amount" required>
-                    <button type="Submit" class="input-box button">Add product</button>
+<!--                <label for="amount"><b>--><?php //echo $userProduct->getByUserIdProductId($this->getCurrentUserId(),$product->getId())->getAmount() ?><!--</b></label>-->
+            </form>
+            <form action= "/decrease-product" method="post">
+                <div class="input-box">
+                    <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
+                </div>
+                <button type="Submit" class="input-box button">-</button>
             </form>
         </div>
 

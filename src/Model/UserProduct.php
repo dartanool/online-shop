@@ -30,7 +30,7 @@ class UserProduct extends \Model\Model
         return $objs;
     }
 
-    public function getByUserIdProductId(int $userId, int $productId) : array | false
+    public function getByUserIdProductId(int $userId, int $productId) : self | null
     {
 
         $statement = $this->pdo->prepare("SELECT * FROM user_products WHERE product_id = :productId AND user_id =:userId");
@@ -38,7 +38,12 @@ class UserProduct extends \Model\Model
 
         $data = $statement->fetch();
 
-        return $data;
+        if ($data === false) {
+            return null;
+        }
+        $obj = $this->createObject($data);
+
+        return $obj;
     }
 
     public function insertByIdProductIdAmount(int $userId, int $productId, int $amount) : void
@@ -48,17 +53,24 @@ class UserProduct extends \Model\Model
         $statement->execute(['product_id' => $productId, 'amount' => $amount]);
     }
 
-    public function updateByIdProductIdAmount(int $userId, int $productId, int $amount) : void
+    public function updateAmountByUserIdProductId(int $userId, int $productId, int $amount) : void
     {
 
         $statement = $this->pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id =:userId and product_id = :product_id");
         $statement->execute(['amount' => $amount, 'userId' => $userId, 'product_id' => $productId]);
     }
 
-    public function deleteByUserId(int $userId)
+    public function deleteByUserId(int $userId) : void
     {
         $statement = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
         $statement->execute(['userId' => $userId]);
+    }
+
+
+    public function decreaseByUserIdProductId(int $userId, int $productId) : void
+    {
+        $statement = $this->pdo->query("DELETE FROM user_products WHERE user_id = {$userId} AND product_id = {$productId}");
+
     }
 
     private function createObject(array $data) : UserProduct
@@ -72,6 +84,7 @@ class UserProduct extends \Model\Model
 
         return $obj;
     }
+
     public function getId(): int
     {
         return $this->id;
