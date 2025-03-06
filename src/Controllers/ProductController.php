@@ -45,17 +45,9 @@ class ProductController extends BaseController
             $product = $this->productModel->getByProductId($productId);
             $reviews = $this->reviewModel->getByProductId($productId);
 
-            $totalScore = 0;
-            $count = 0;
-            foreach ($reviews as $review){
-                $totalScore += $review->getScore();
-                $count++;
-            }
-
-            $averageScore = $totalScore/$count;
+            $averageScore = $this->getAverageScore($reviews);
 
             require_once "../Views/product_page.php";
-
 
         }
     }
@@ -102,5 +94,23 @@ class ProductController extends BaseController
         }
 
         return $errors;
+    }
+
+    private function getAverageScore(array $reviews) : float
+    {
+        $totalScore = 0;
+        $count = 0;
+        foreach ($reviews as $review){
+            $totalScore += $review->getScore();
+            $count++;
+        }
+
+        if ($count !== 0){
+            $averageScore = $totalScore/$count;
+        } else {
+            $averageScore = 0;
+        }
+
+        return round($averageScore,2);
     }
 }
