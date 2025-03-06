@@ -8,15 +8,19 @@ class User extends \Model\Model
     private string $email;
     private string $password;
 
+    protected function getTableName() : string
+    {
+        return 'users';
+    }
     public function insertNameEmailPassword(string $name,string $email,string $password) : void
     {
-        $statement = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $statement = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
         $statement->execute([':name' => $name, ':email' => $email, ':password' => $password]);
     }
     public function getById(int $id) :self | null
     {
 
-        $statement = $this->pdo->query("SELECT * FROM users WHERE id = {$id}");
+        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE id = {$id}");
         $user = $statement->fetch();
 
         if ($user === false) {
@@ -32,7 +36,7 @@ class User extends \Model\Model
     public function getByEmail(string $email) : self | null// add false
     {
 
-        $statement = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $statement->execute([':email' => $email]);
 
         $result = $statement->fetch();
@@ -49,21 +53,21 @@ class User extends \Model\Model
     public function updateEmailById(string $email,int $id) : void
     {
 
-        $statement = $this->pdo->prepare("UPDATE users SET email = :email WHERE id = {$id}");
+        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = {$id}");
         $statement->execute([':email' => $email]);
     }
 
     public function updateNameById(string $name,int $id) : void
     {
 
-        $statement = $this->pdo->prepare("UPDATE users SET name = :name WHERE id = {$id}");
+        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = {$id}");
         $statement->execute([':name' => $name]);
     }
 
     public function updatePasswordById(string $password, int $id) : void
     {
 
-        $statement = $this->pdo->prepare("UPDATE users SET password = :password WHERE id = {$id}");
+        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET password = :password WHERE id = {$id}");
         $statement->execute([':password' => $password]);
     }
 

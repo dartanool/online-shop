@@ -9,10 +9,14 @@ class UserProduct extends \Model\Model
     private int $amount;
     private Product $product;
 
+    protected function getTableName() : string
+    {
+        return 'user_products';
+    }
     public function getAllUserProductsByUserId(int $id) : array | null
     {
 
-        $statement = $this->pdo->query("SELECT * FROM user_products WHERE user_id = {$id}");
+        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE user_id = {$id}");
 
         $orders = $statement->fetchAll();
 
@@ -33,7 +37,7 @@ class UserProduct extends \Model\Model
     public function getByUserIdProductId(int $userId, int $productId) : self | null
     {
 
-        $statement = $this->pdo->prepare("SELECT * FROM user_products WHERE product_id = :productId AND user_id =:userId");
+        $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE product_id = :productId AND user_id =:userId");
         $statement->execute(['productId' => $productId, 'userId' => $userId]);
 
         $data = $statement->fetch();
@@ -49,27 +53,27 @@ class UserProduct extends \Model\Model
     public function insertByIdProductIdAmount(int $userId, int $productId, int $amount) : void
     {
 
-        $statement = $this->pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES ($userId, :product_id, :amount)");
+        $statement = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (user_id, product_id, amount) VALUES ($userId, :product_id, :amount)");
         $statement->execute(['product_id' => $productId, 'amount' => $amount]);
     }
 
     public function updateAmountByUserIdProductId(int $userId, int $productId, int $amount) : void
     {
 
-        $statement = $this->pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id =:userId and product_id = :product_id");
+        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET amount = :amount WHERE user_id =:userId and product_id = :product_id");
         $statement->execute(['amount' => $amount, 'userId' => $userId, 'product_id' => $productId]);
     }
 
     public function deleteByUserId(int $userId) : void
     {
-        $statement = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
+        $statement = $this->pdo->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :userId");
         $statement->execute(['userId' => $userId]);
     }
 
 
     public function decreaseByUserIdProductId(int $userId, int $productId) : void
     {
-        $statement = $this->pdo->query("DELETE FROM user_products WHERE user_id = {$userId} AND product_id = {$productId}");
+        $statement = $this->pdo->query("DELETE FROM {$this->getTableName()} WHERE user_id = {$userId} AND product_id = {$productId}");
 
     }
 

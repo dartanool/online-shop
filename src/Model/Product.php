@@ -8,10 +8,15 @@ class Product extends \Model\Model
     private string|null $description;
     private string|null  $image_url;
     private int $totalSum;
+
+    protected function getTableName(): string
+    {
+        return 'products';
+    }
     public function getById() : array | null
     {
 
-        $statement = $this->pdo->query("SELECT * FROM products");
+        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()}");
 
         $products = $statement->fetchAll();
 
@@ -29,7 +34,7 @@ class Product extends \Model\Model
     public function getByProductId(int $productId) : self | null
     {
 
-        $statement = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
+        $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :productId");
         $statement->execute([':productId' => $productId]);
 
         $data = $statement->fetch();
