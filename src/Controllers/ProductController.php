@@ -39,13 +39,21 @@ class ProductController extends BaseController
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
-
             $data = $_POST;
             $productId = $data['product_id'];
 
             $product = $this->productModel->getByProductId($productId);
-
             $reviews = $this->reviewModel->getByProductId($productId);
+
+            $totalScore = 0;
+            $count = 0;
+            foreach ($reviews as $review){
+                $totalScore += $review->getScore();
+                $count++;
+            }
+
+            $averageScore = $totalScore/$count;
+
             require_once "../Views/product_page.php";
 
 

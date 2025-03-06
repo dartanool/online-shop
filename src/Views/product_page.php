@@ -13,11 +13,11 @@
         <h3 class="product-price">Цена: <?php echo $product->getPrice()?> руб.</h3>
         <h4 class="description-title">Описание</h4>
             <p class="product-description"><?php echo $product->getDescription()?></p>
-        <h5 class="reviews-title">Отзывы</h5>
 
     </div>
     <div class="reviews-section">
         <h4 class="reviews-title">Отзывы</h4>
+            <h5 class="average-rating">Средняя оценка: <?php echo $averageScore;?></h5>
         <div class="reviews-list">
             <?php foreach ($reviews as $review) { ?>
                 <div class="review-item">
@@ -118,6 +118,11 @@
         text-align: center;
     }
 
+    .average-rating {
+        font-size: 18px;
+        margin-bottom: 20px;
+        text-align: left;
+    }
     .reviews-list {
         padding: 0 20px;
     }
