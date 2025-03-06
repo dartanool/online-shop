@@ -71,7 +71,7 @@ class User extends \Model\Model
         $statement->execute([':password' => $password]);
     }
 
-    public function createObject(array $data) : self
+    private function createObject(array $data) : self
     {
         $obj = new self();
 

@@ -44,47 +44,6 @@ class UserController extends BaseController
         require '../Views/registration_form.php';
     }
 
-    private function validateRegistration(array $data): array
-    {
-        $errors = [];
-
-        if (!(isset($data['name']))) {
-            $errors['name'] = "Name is not filled";
-        } elseif (strlen($data['name']) < 3) {
-            $errors['name'] = "Name {$data['name']} too short";
-        }
-
-        if (!(isset($data['password']))) {
-            $errors['password'] = "Password is not filled";
-        } elseif (!(isset($data['check_password']))) {
-
-            $errors['password'] = "Check_password is not filled";
-
-        } elseif (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
-            preg_match('/[A-Z]/', $data['password']) &&
-            preg_match('/[a-z]/', $data['password']) &&
-            preg_match('/[0-9]/', $data['password']))) {
-            $errors['password'] = "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
-        } elseif ($data['check_password'] !== $data['password']) {
-            $errors['password'] = "Пароли не совпадают";
-        }
-
-        if (!(isset($data['email']))) {
-            $errors['email'] = "Email is not filled";
-        } elseif (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
-            $errors['email'] = "Email {$data['email']} не валиден.";
-        } else {
-
-            $statement = $this->userModel->getByEmail($data['email']);
-
-            if (!(empty($statement))) {
-                $errors['email'] = "Email {$data['email']} already exists";
-            }
-        }
-        return $errors;
-    }
-
-
     //Login
     public function login() : void
     {
@@ -105,18 +64,7 @@ class UserController extends BaseController
         require_once '../Views/login_form.php';
     }
 
-    private function validateLogin(array $data): array
-    {
-        $errors = [];
-        if (!(isset($data['username']))) {
-            $errors = "username incorrect";
-        }
-        if (!(isset($data['password']))) {
-            $errors = "password incorrect";
-        }
 
-        return $errors;
-    }
 
     public function getLogin()
     {
@@ -141,45 +89,6 @@ class UserController extends BaseController
 
 //Edit Profile
 
-    private function validateEdit(array $data): array
-    {
-        $errors = [];
-
-        if (!(empty($data['name']))) // не пусто, имя ЕСТЬ => true
-        {
-            if (strlen($data['name']) < 3) {
-                $errors['name'] = "Name {$data['name']} too short";
-            }
-        }
-
-        if (!(empty($data['email']))) {
-            if (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
-                $errors['email'] = "Email {$data['email']} не валиден.";
-            } else {
-
-                $statement= $this->userModel->getByEmail($data['email']);
-
-                if (!empty($statement)) {
-                    $errors['email'] = "Email {$data['email']} already exists";
-                }
-            }
-        }
-
-        if (!(empty($data['password']))) {
-            if (!(empty($data['checkPassword']))) {
-                if (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
-                    preg_match('/[A-Z]/', $data['password']) &&
-                    preg_match('/[a-z]/', $data['password']) &&
-                    preg_match('/[0-9]/', $data['password']))) {
-                    $errors['password'] = "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
-
-                } elseif ($data['checkPassword'] !== $data['password']) {
-                    $errors['password'] = "Пароли не совпадают";
-                }
-            }
-        }
-        return $errors;
-    }
 
     public function editProfile() : void
     {
@@ -239,5 +148,101 @@ class UserController extends BaseController
         $this->authService->logout();
         header('Location: /login');
         exit();
+    }
+
+
+    private function validateRegistration(array $data): array
+    {
+        $errors = [];
+
+        if (!(isset($data['name']))) {
+            $errors['name'] = "Name is not filled";
+        } elseif (strlen($data['name']) < 3) {
+            $errors['name'] = "Name {$data['name']} too short";
+        }
+
+        if (!(isset($data['password']))) {
+            $errors['password'] = "Password is not filled";
+        } elseif (!(isset($data['check_password']))) {
+
+            $errors['password'] = "Check_password is not filled";
+
+        } elseif (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
+            preg_match('/[A-Z]/', $data['password']) &&
+            preg_match('/[a-z]/', $data['password']) &&
+            preg_match('/[0-9]/', $data['password']))) {
+            $errors['password'] = "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
+        } elseif ($data['check_password'] !== $data['password']) {
+            $errors['password'] = "Пароли не совпадают";
+        }
+
+        if (!(isset($data['email']))) {
+            $errors['email'] = "Email is not filled";
+        } elseif (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
+            $errors['email'] = "Email {$data['email']} не валиден.";
+        } else {
+
+            $statement = $this->userModel->getByEmail($data['email']);
+
+            if (!(empty($statement))) {
+                $errors['email'] = "Email {$data['email']} already exists";
+            }
+        }
+        return $errors;
+    }
+
+
+    private function validateLogin(array $data): array
+    {
+        $errors = [];
+        if (!(isset($data['username']))) {
+            $errors = "username incorrect";
+        }
+        if (!(isset($data['password']))) {
+            $errors = "password incorrect";
+        }
+
+        return $errors;
+    }
+
+
+    private function validateEdit(array $data): array
+    {
+        $errors = [];
+
+        if (!(empty($data['name']))) // не пусто, имя ЕСТЬ => true
+        {
+            if (strlen($data['name']) < 3) {
+                $errors['name'] = "Name {$data['name']} too short";
+            }
+        }
+
+        if (!(empty($data['email']))) {
+            if (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
+                $errors['email'] = "Email {$data['email']} не валиден.";
+            } else {
+
+                $statement= $this->userModel->getByEmail($data['email']);
+
+                if (!empty($statement)) {
+                    $errors['email'] = "Email {$data['email']} already exists";
+                }
+            }
+        }
+
+        if (!(empty($data['password']))) {
+            if (!(empty($data['checkPassword']))) {
+                if (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
+                    preg_match('/[A-Z]/', $data['password']) &&
+                    preg_match('/[a-z]/', $data['password']) &&
+                    preg_match('/[0-9]/', $data['password']))) {
+                    $errors['password'] = "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
+
+                } elseif ($data['checkPassword'] !== $data['password']) {
+                    $errors['password'] = "Пароли не совпадают";
+                }
+            }
+        }
+        return $errors;
     }
 }
