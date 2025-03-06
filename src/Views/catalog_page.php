@@ -18,7 +18,6 @@
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
                     <button type="Submit" class="input-box button">+</button>
-
                 <?php if (isset($errors['amount'])): ?>
                     <label style="color: red"><?php echo $product->getId();?></label>
                 <?php endif; ?>
@@ -29,6 +28,12 @@
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
                 <button type="Submit" class="input-box button">-</button>
+            </form>
+            <form action= "/product" method="post">
+                <div class="input-box">
+                    <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
+                </div>
+                <button type="Submit" class="input-box button">open</button>
             </form>
         </div>
 

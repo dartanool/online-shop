@@ -29,6 +29,7 @@ $app->get('/create-order',OrderController::class,'getCreateForm' );
 $app->post('/create-order',OrderController::class,'create' );
 $app->get('/user-orders', OrderController::class,'getAllOrders' );
 $app->post('/decrease-product',CartController::class,'decreaseProduct' );
+$app->post('/product',ProductController::class,'getReview' );
 
 $app->run();
 
