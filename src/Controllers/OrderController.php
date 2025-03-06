@@ -94,6 +94,30 @@ class OrderController extends BaseController
         }
 
     }
+
+    private function newOrderProducts(array $orderProducts): array
+    {
+        $newOrderProducts = [];
+        foreach ($orderProducts as $orderProduct)
+        {
+            $product = $this->productModel->getByProductId($orderProduct->getProductId());
+            $orderProduct->setProduct($product);
+            $totalSum = $orderProduct->getAmount() * $orderProduct->getProduct()->getPrice();
+            $orderProduct->getProduct()->setTotalSum($totalSum);
+            $newOrderProducts[] = $orderProduct;
+        }
+        return $newOrderProducts;
+    }
+    private function totalOrderProducts(array $newOrderProducts): int
+    {
+        $total = 0;
+        foreach ($newOrderProducts as $newOrderProduct)
+        {
+            $total += $newOrderProduct->getProduct()->getTotalSum();
+        }
+        return $total;
+    }
+
     private function validate(array $data): array
     {
         $errors = [];
@@ -129,27 +153,5 @@ class OrderController extends BaseController
             $errors['phone'] = 'Введите имя';
         }
         return $errors;
-    }
-    private function newOrderProducts(array $orderProducts): array
-    {
-        $newOrderProducts = [];
-        foreach ($orderProducts as $orderProduct)
-        {
-            $product = $this->productModel->getByProductId($orderProduct->getProductId());
-            $orderProduct->setProduct($product);
-            $totalSum = $orderProduct->getAmount() * $orderProduct->getProduct()->getPrice();
-            $orderProduct->getProduct()->setTotalSum($totalSum);
-            $newOrderProducts[] = $orderProduct;
-        }
-        return $newOrderProducts;
-    }
-    private function totalOrderProducts(array $newOrderProducts): int
-    {
-        $total = 0;
-        foreach ($newOrderProducts as $newOrderProduct)
-        {
-            $total += $newOrderProduct->getProduct()->getTotalSum();
-        }
-        return $total;
     }
 }

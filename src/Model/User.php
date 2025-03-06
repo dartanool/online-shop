@@ -14,7 +14,8 @@ class User extends \Model\Model
     }
     public function insertNameEmailPassword(string $name,string $email,string $password) : void
     {
-        $statement = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
+        $statement = $this->pdo->prepare(
+            "INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
         $statement->execute([':name' => $name, ':email' => $email, ':password' => $password]);
     }
     public function getById(int $id) :self | null
