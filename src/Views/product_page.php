@@ -21,7 +21,7 @@
         <div class="reviews-list">
             <?php foreach ($reviews as $review) { ?>
                 <div class="review-item">
-                    <p class="review-author">Автор: <?php echo $review->getUserName()?></p>
+<!--                    <p class="review-author">Автор: --><?php //echo $review->getUserName()?><!--</p>-->
                     <p class="review-text"><?php echo $review->getReviewText()?></p>
                 </div>
             <?php } ?>

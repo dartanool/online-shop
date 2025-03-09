@@ -28,7 +28,8 @@ class ProductController extends BaseController
             $products = $this->productModel->getById();
 
             //
-            $userProduct =$this->userProductModel->getAllUserProductsByUserId($this->authService->check());
+            $userProducts =$this->userProductModel->getAllUserProductsByUserId($this->authService->getCurrentUser()->getId());
+
 
             require_once "../Views/catalog_page.php";
         }
@@ -41,12 +42,20 @@ class ProductController extends BaseController
         } else {
             $data = $_POST;
             $productId = $data['product_id'];
+            $userName = $this->authService->getCurrentUser()->getName();
+            $userId =$this->authService->getCurrentUser()->getId();
 
             $product = $this->productModel->getByProductId($productId);
             $reviews = $this->reviewModel->getByProductId($productId);
 
             $averageScore = $this->getAverageScore($reviews);
 
+//            $reviews = $this->reviewModel->getByUserIdProductId($userId, $productId);
+//
+//            foreach ($reviews as $review){
+//                $review->setUserName($userName);
+//
+//            }
             require_once "../Views/product_page.php";
 
         }
@@ -61,18 +70,26 @@ class ProductController extends BaseController
             $errors = $this->validateReview($data);
 
             if (empty($errors)) {
-                $userName = $this->authService->getCurrentUser()->getName();;
+
+                $userName = $this->authService->getCurrentUser()->getName();
                 $userId =$this->authService->getCurrentUser()->getId();
                 $productId = $data['productId'];
                 $reviewText = $data['reviewText'];
                 $score = $data['score'];
 
-                $this->reviewModel->create($productId, $userId, $reviewText, $score, $userName);
+                $this->reviewModel->create($productId, $userId, $reviewText, $score);
+//                $this->reviewModel->setUserName($userName);
 
-                // почему белый экран
-//                header('Location: catalog');
+                $reviews = $this->reviewModel->getByUserIdProductId($userId, $productId);
+
+                foreach ($reviews as $review){
+                    $review->setUserName($userName);
+
+                }
+
+                header('Location: catalog');
             }
-            require_once "../Views/product_page.php"; //  не хватает  product_id
+            require_once "../Views/product_page.php";
 
         }
     }

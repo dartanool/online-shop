@@ -18,10 +18,11 @@
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
                     <button type="Submit" class="input-box button">+</button>
-                <?php if (isset($errors['amount'])): ?>
-                    <label style="color: red"><?php echo $product->getId();?></label>
-                <?php endif; ?>
-<!--                <label for="amount"><b>--><?php //echo $userProduct->getByUserIdProductId($this->getCurrentUserId(),$product->getId())->getAmount() ?><!--</b></label>-->
+                <?php foreach ($userProducts as $userProduct): ?>
+                        <?php if ($product->getId() === $userProduct->getProductId()): ?>
+                            <label for="amount"><b><?php echo $userProduct->getByUserIdProductId($this->authService->getCurrentUser()->getId(),$product->getId())->getAmount() ?></b></label>
+                        <?php endif; ?>
+                <?php endforeach; ?>
             </form>
             <form action= "/decrease-product" method="post">
                 <div class="input-box">
