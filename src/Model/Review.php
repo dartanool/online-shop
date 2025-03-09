@@ -10,6 +10,7 @@ class Review extends Model
     private string $reviewText;
     private int $score;
     private string $userName;
+    private string $createdAt;
 
     protected function getTableName(): string
     {
@@ -46,27 +47,7 @@ class Review extends Model
 
         return $objs;
     }
-
-    public function getByUserIdProductId(int $userId, int $productId) : array|null
-    {
-        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE product_id = {$productId} AND user_id = {$userId}");
-        $reviews = $statement->fetchAll();
-
-        if ($reviews === false){
-            return null;
-        }
-
-        $objs = [];
-        foreach ($reviews as $review){
-
-            $objs[] = $this->createObject($review);
-
-        }
-
-        return $objs;
-    }
-
-    private function createObject(array $data): self
+        private function createObject(array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];
@@ -74,8 +55,14 @@ class Review extends Model
         $obj->productId = $data['product_id'];
         $obj->reviewText = $data['review_text'];
         $obj->score = $data['score'];
+        $obj->createdAt = $data['created_at'];
 
         return $obj;
+    }
+
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
     }
 
     public function getId(): int

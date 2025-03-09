@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Model\Product;
 use Model\Review;
+use Model\User;
 use Model\UserProduct;
 
 class ProductController extends BaseController
@@ -10,6 +11,7 @@ class ProductController extends BaseController
     private Product $productModel;
     private UserProduct $userProductModel;
     private Review $reviewModel;
+    private User $userModel;
 
     public function __construct()
     {
@@ -17,6 +19,7 @@ class ProductController extends BaseController
         $this->productModel = new Product();
         $this->userProductModel = new UserProduct();
         $this->reviewModel = new Review();
+        $this->userModel = new User();
     }
     //Catalog
     public function getCatalog() : void
@@ -42,7 +45,6 @@ class ProductController extends BaseController
         } else {
             $data = $_POST;
             $productId = $data['product_id'];
-            $userName = $this->authService->getCurrentUser()->getName();
             $userId =$this->authService->getCurrentUser()->getId();
 
             $product = $this->productModel->getByProductId($productId);
@@ -50,12 +52,12 @@ class ProductController extends BaseController
 
             $averageScore = $this->getAverageScore($reviews);
 
-//            $reviews = $this->reviewModel->getByUserIdProductId($userId, $productId);
-//
-//            foreach ($reviews as $review){
-//                $review->setUserName($userName);
-//
-//            }
+            foreach ($reviews as $review){
+                $userId = $review->getUserId();
+                $userName = $this->userModel->getById($userId)->getName();
+                $review->setUserName($userName);
+
+            }
             require_once "../Views/product_page.php";
 
         }
@@ -78,14 +80,6 @@ class ProductController extends BaseController
                 $score = $data['score'];
 
                 $this->reviewModel->create($productId, $userId, $reviewText, $score);
-//                $this->reviewModel->setUserName($userName);
-
-                $reviews = $this->reviewModel->getByUserIdProductId($userId, $productId);
-
-                foreach ($reviews as $review){
-                    $review->setUserName($userName);
-
-                }
 
                 header('Location: catalog');
             }
@@ -125,7 +119,7 @@ class ProductController extends BaseController
         if ($count !== 0){
             $averageScore = $totalScore/$count;
         } else {
-            $averageScore = 0;
+            $averageScore = $totalScore;
         }
 
         return round($averageScore,2);
