@@ -39,7 +39,39 @@ class CartController extends BaseController
         }
     }
 
-    //Add ProductController
+
+    // Add and delete 1 product, if amount !=1
+    public function addProduct() : void
+    {
+        if (!$this->authService->check()) {
+            header('Location: login');
+        } else {
+
+            $userId = $this->authService->getCurrentUser()->getId();
+            $productId = $_POST['product_id'];
+
+            $this->cartService->addProduct($productId, $userId);
+
+            header("Location: catalog");
+        }
+    }
+
+    public function decreaseProduct() : void
+    {
+        if (!$this->authService->check()){
+            header('Location: login');
+        } else {
+            $userId = $this->authService->getCurrentUser()->getId();
+            $productId = $_POST['product_id'];
+
+            $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount();
+
+            $this->cartService->decreaseProduct($productId, $userId,$amount);
+
+            header("Location: catalog");
+
+        }
+    }
 
     private function validateAddProduct(array $data): array
     {
@@ -62,56 +94,5 @@ class CartController extends BaseController
         }
 
         return $errors;
-    }
-
-
-    // Add and delete 1 product, if amount !=0
-    public function addProduct() : void
-    {
-        if (!$this->authService->check()) {
-            header('Location: login');
-        } else {
-
-            $user = $this->authService->getCurrentUser();
-            $productId = $_POST['product_id'];
-            $amount = 1;
-
-            $data = $this->userProductModel->getByUserIdProductId($user->getId(), $productId);
-
-            if (!isset($data)) {
-                $this->userProductModel->insertByIdProductIdAmount($user->getId(), $productId, $amount);
-            } else {
-//                $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount() + $amount;
-                $amount = $data->getAmount() + $amount;
-                // update
-                $this->userProductModel->updateAmountByUserIdProductId($user->getId(), $productId, $amount);
-            }
-
-            header("Location: catalog");
-        }
-    }
-
-    public function decreaseProduct() : void
-    {
-        if (!$this->authService->check()){
-            header('Location: login');
-        } else {
-            $user = $this->authService->getCurrentUser();
-            $productId = $_POST['product_id'];
-
-            $data = $this->userProductModel->getByUserIdProductId($user->getId(), $productId);
-            $amount = $data->getAmount();
-
-
-            if ($amount === 1) {
-                $this->userProductModel->decreaseByUserIdProductId($user->getId(), $productId);
-            }  else {
-                $amount = $amount = $data->getAmount() -1;
-                $this->userProductModel->updateAmountByUserIdProductId($user->getId(), $productId, $amount);
-            }
-
-            header("Location: catalog");
-
-        }
     }
 }

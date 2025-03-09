@@ -23,7 +23,7 @@ class OrderController extends BaseController
         $this->orderModel = new Order();
     }
 
-    public function getCreateForm()  //форма order если моя корзина не пустая
+    public function getCreateForm()
     {
         if ($this->authService->check()) {
             $user = $this->authService->getCurrentUser();
@@ -72,21 +72,17 @@ class OrderController extends BaseController
 
         $data = $_POST;
         $errors = $this->validate($data);
-        $user = $this->authService->getCurrentUser();
-        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
+        $userId = $this->authService->getCurrentUser()->getId();
+
+        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($userId);
         $newOrderProducts = $this->newOrderProducts($orderProducts);
         $total = $this->totalOrderProducts($newOrderProducts);
 
         if (empty($errors)) {
-            $user = $this->authService->getCurrentUser();
+            $orderId = $this->orderModel->create($data, $userId);
 
-            $orderId = $this->orderModel->create($data, $user->getId());
+            $this->orderService->create($orderId, $userId);
 
-            foreach ($orderProducts as $orderProduct)
-            {
-                $this->orderProductModel->create($orderId, $orderProduct->getProductId(), $orderProduct->getAmount());
-            }
-            $this->userProductModel->deleteByUserId($user->getId());
             header('Location: /user-orders');
             exit();
         }else{
