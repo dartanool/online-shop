@@ -5,6 +5,7 @@ use Model\Product;
 use Model\Review;
 use Model\User;
 use Model\UserProduct;
+use Request\GetProductIdRequest;
 
 class ProductController extends BaseController
 {
@@ -37,12 +38,12 @@ class ProductController extends BaseController
         }
     }
 
-    public function getProduct(array $data):void
+    public function getProduct(GetProductIdRequest $request):void
     {
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
-            $productId = $data['product_id'];
+            $productId = $request->getProductId();
             $userId =$this->authService->getCurrentUser()->getId();
 
             $product = $this->productModel->getByProductId($productId);

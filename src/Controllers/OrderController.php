@@ -8,6 +8,7 @@ use Model\UserProduct;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
+use Request\CreateOrderRequest;
 
 
 class OrderController extends BaseController
@@ -65,21 +66,21 @@ class OrderController extends BaseController
 
         require_once '../Views/user_orders.php';
     }
-    public function create(array $data)
+    public function create(CreateOrderRequest $request)
     {
         if (!$this->authService->check()) {
             header('Location: /login');
             exit();
         }
 
-        $errors = $this->validate($data);
+        $errors = $request->validate();
         $user = $this->authService->getCurrentUser();
 
         $newOrderProducts = $this->newOrderProducts($user);
         $total = $this->totalOrderProducts($newOrderProducts);
 
         if (empty($errors)) {
-            $dto = new OrderCreateDTO($data['name'], $data['phone'], $data['comment'], $data['address'], $user);
+            $dto = new OrderCreateDTO($request->getName(), $request->getPhone(), $request->getComment(), $request->getAddress(), $user);
 
             $this->orderService->create($dto);
 
@@ -113,42 +114,5 @@ class OrderController extends BaseController
             $total += $newOrderProduct->getProduct()->getTotalSum();
         }
         return $total;
-    }
-
-    private function validate(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['name'])) {
-            if (strlen($data['name']) < 2) {
-                $errors['name'] = 'Имя пользователя должно быть больше 2 символов';
-            } elseif (!preg_match('/^[a-zA-Zа-яА-Я0-9_\-\.]+$/u', $data['name'])) {
-                $errors['name'] = "Имя пользователя может содержать только буквы, цифры, символы '_', '-', '.'";
-            }
-        } else {
-            $errors['name'] = 'Введите имя';
-        }
-
-        if (isset($data['address'])) {
-            if (!preg_match('/^[\d\s\w\.,-]+$/u', $data['address'])) {
-                $errors['address'] = "Адрес содержит недопустимые символы";
-            }elseif (!preg_match('/[а-яА-ЯёЁ]+\s+\d+/', $data['address'])) {
-                $errors['address'] = "Адрес должен содержать номер дома и улицу";
-            }
-        } else {
-            $errors['address'] = 'Введите адрес';
-        }
-
-        if (isset($data['phone'])) {
-            $cleanedPhone = preg_replace('/\D/', '', $data['phone']);
-            if(strlen($cleanedPhone) < 11) {
-                $errors['phone'] = 'Номер телефона не может быть меньше 11 символов';
-            }elseif (!preg_match('/^\+\d+$/', $data['phone'])) {
-                $errors['phone'] = "Номер телефона должен начинаться с '+' и содержать только цифры после него";
-            }
-        } else {
-            $errors['phone'] = 'Введите имя';
-        }
-        return $errors;
     }
 }

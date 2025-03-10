@@ -3,7 +3,7 @@ namespace Controllers;
 
 use Model\Product;
 use Model\UserProduct;
-use Request\AddProductRequest;
+use Request\GetProductIdRequest;
 
 class CartController extends BaseController
 {
@@ -42,7 +42,7 @@ class CartController extends BaseController
 
 
     // Add and delete 1 product, if amount !=1
-    public function addProduct(AddProductRequest $request) : void
+    public function addProduct(GetProductIdRequest $request) : void
     {
         if (!$this->authService->check()) {
             header('Location: login');
@@ -58,7 +58,7 @@ class CartController extends BaseController
     }
 
 
-    public function decreaseProduct(AddProductRequest $request) : void
+    public function decreaseProduct(GetProductIdRequest $request) : void
     {
         if (!$this->authService->check()){
             header('Location: login');

@@ -4,7 +4,7 @@ namespace Request;
 
 use Model\Product;
 
-class AddProductRequest
+class GetProductIdRequest
 {
     private Product $productModel;
     public function __construct(private array $data)
