@@ -111,7 +111,7 @@ class App
 
 
                 $controller = new $class();
-                $controller ->$method();
+                $controller ->$method($_POST);
 
 
             } else {

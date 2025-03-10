@@ -30,7 +30,6 @@ class ProductController extends BaseController
 
             $products = $this->productModel->getById();
 
-            //
             $userProducts =$this->userProductModel->getAllUserProductsByUserId($this->authService->getCurrentUser()->getId());
 
 
@@ -38,12 +37,11 @@ class ProductController extends BaseController
         }
     }
 
-    public function getProduct():void
+    public function getProduct(array $data):void
     {
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
-            $data = $_POST;
             $productId = $data['product_id'];
             $userId =$this->authService->getCurrentUser()->getId();
 
@@ -63,12 +61,11 @@ class ProductController extends BaseController
         }
     }
 
-    public function addReview()
+    public function addReview(array $data)
     {
         if (!$this->authService->check()){
             header('Location: login');
         } else {
-            $data = $_POST;
             $errors = $this->validateReview($data);
 
             if (empty($errors)) {

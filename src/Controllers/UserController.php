@@ -14,15 +14,14 @@ class UserController extends BaseController
     }
 
     //Registration
-    public function registrate() :void
+    public function registrate(array $data) :void
     {
-        $data = $_POST;
         $errors = $this->validateRegistration($data);
 
         if (empty($errors)) {
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $name = $data['name'];
+            $email = $data['email'];
+            $password = $data['password'];
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -45,13 +44,13 @@ class UserController extends BaseController
     }
 
     //Login
-    public function login() : void
+    public function login(array $data) : void
     {
         $errors = [];
-        $errors = $this->validateLogin($_POST);
+        $errors = $this->validateLogin($data);
 
         if (empty($errors)) {
-            $result = $this->authService->auth($_POST['username'], $_POST['password']);
+            $result = $this->authService->auth($data['username'], $data['password']);
 
             if ($result) {
                 header("Location: /catalog");
@@ -90,12 +89,11 @@ class UserController extends BaseController
 //Edit Profile
 
 
-    public function editProfile() : void
+    public function editProfile($data) : void
     {
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
-            $data = $_POST;
 
             $errors = $this->validateEdit($data);
 
@@ -105,18 +103,18 @@ class UserController extends BaseController
 
                 if (!(empty($data['name']))) // не пустой => true
                 {
-                    $name = $_POST['name'];
+                    $name = $data['name'];
                     $this->userModel->updateNameById($name, $user->getId());
 
                 }
 
                 if (!(empty($data['email']))) {
-                    $email = $_POST['email'];
+                    $email = $data['email'];
                     $this->userModel->updateEmailById($email, $user->getId());
                 }
 
                 if (!(empty($data['password']))) {
-                    $password = $_POST['password'];
+                    $password = $data['password'];
                     $this->userModel->updatePasswordById($password, $user->getId());
                 }
                 header('Location: /user-profile');

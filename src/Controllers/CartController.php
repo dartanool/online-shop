@@ -41,14 +41,14 @@ class CartController extends BaseController
 
 
     // Add and delete 1 product, if amount !=1
-    public function addProduct() : void
+    public function addProduct(array $data) : void
     {
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
 
             $userId = $this->authService->getCurrentUser()->getId();
-            $productId = $_POST['product_id'];
+            $productId = $data['product_id'];
 
             $this->cartService->addProduct($productId, $userId);
 
@@ -56,13 +56,13 @@ class CartController extends BaseController
         }
     }
 
-    public function decreaseProduct() : void
+    public function decreaseProduct(array $data) : void
     {
         if (!$this->authService->check()){
             header('Location: login');
         } else {
             $userId = $this->authService->getCurrentUser()->getId();
-            $productId = $_POST['product_id'];
+            $productId = $data['product_id'];
 
             $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount();
 

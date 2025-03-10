@@ -30,7 +30,6 @@ class OrderController extends BaseController
         if ($this->authService->check()) {
             $user = $this->authService->getCurrentUser();
             $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
-
             if(empty($orderProducts))
             {
                 header('Location: /catalog');
@@ -59,20 +58,20 @@ class OrderController extends BaseController
         foreach ($userOrders as $userOrder) {
             $orderProducts = $this->orderProductModel->getAllByOrderId($userOrder->getId());
             $newOrderProducts = $this->newOrderProducts($user);
+            $userOrder->setOrderProducts($newOrderProducts);
             $userOrder->setTotal($this->totalOrderProducts($newOrderProducts));
             $newUserOrders[] = $userOrder;
         }
 
         require_once '../Views/user_orders.php';
     }
-    public function create()
+    public function create(array $data)
     {
         if (!$this->authService->check()) {
             header('Location: /login');
             exit();
         }
 
-        $data = $_POST;
         $errors = $this->validate($data);
         $user = $this->authService->getCurrentUser();
 
@@ -87,14 +86,14 @@ class OrderController extends BaseController
             header('Location: /user-orders');
             exit();
         }else{
-            require_once '../Views/order_pagdae.php';
+            require_once '../Views/order_page.php';
         }
 
     }
 
     private function newOrderProducts(User $user): array
     {
-        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user-> getId());
+        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
         $newOrderProducts = [];
         foreach ($orderProducts as $orderProduct)
         {

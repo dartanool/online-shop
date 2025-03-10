@@ -14,6 +14,7 @@ class Order extends \Model\Model
     private string $address;
     private int $total;
     private Product $products;
+    private array $orderProducts;
 
     protected function getTableName(): string
     {
@@ -64,6 +65,7 @@ class Order extends \Model\Model
         $obj->contact_phone = $data['contact_phone'];
         $obj->comment = $data['comment'];
         $obj->address = $data['address'];
+        $obj->userId = $data['user_id'];
 
         return $obj;
     }
@@ -117,6 +119,14 @@ class Order extends \Model\Model
         $this->products = $products;
     }
 
+    public function getOrderProducts(): array
+    {
+        return $this->orderProducts;
+    }
+    public function setOrderProducts(array $orderProducts): void
+    {
+        $this->orderProducts = $orderProducts;
+    }
     public function getProduct(): Product
     {
         return $this->product;
