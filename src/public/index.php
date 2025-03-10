@@ -25,7 +25,7 @@ $app->get('/registration',UserController::class,'getRegistrate', RegistrateReque
 //$app->get('/cart', CartController::class,'getCart' );
 //$app->get('/create-order',OrderController::class,'getCreateForm' );
 //$app->get('/add-product',CartController::class,'getCatalog');
-//$app->get('/user-profile',UserController::class,'getProfile' );
+$app->get('/user-profile', UserController::class,'getProfile', EditProfileRequest::class );
 $app->get('/edit-user-profile', UserController::class,'getEditProfile', EditProfileRequest::class);
 $app->get('/login', UserController::class,'getLogin', LoginRequest::class);
 
