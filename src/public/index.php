@@ -6,6 +6,7 @@ use Controllers\ProductController;
 use Controllers\UserController;
 use Core\App;
 use Core\Autoloader;
+use Request\EditProfileRequest;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 
@@ -25,12 +26,12 @@ $app->get('/registration',UserController::class,'getRegistrate', RegistrateReque
 //$app->get('/create-order',OrderController::class,'getCreateForm' );
 //$app->get('/add-product',CartController::class,'getCatalog');
 //$app->get('/user-profile',UserController::class,'getProfile' );
-//$app->get('/edit-user-profile', UserController::class,'getEditProfile');
+$app->get('/edit-user-profile', UserController::class,'getEditProfile', EditProfileRequest::class);
 $app->get('/login', UserController::class,'getLogin', LoginRequest::class);
 
 $app->post('/registration',UserController::class,'registrate', RegistrateRequest::class);
 $app->post('/login', UserController::class,'login', LoginRequest::class);
-//$app->post('/edit-user-profile', UserController::class,'editProfile');
+$app->post('/edit-user-profile', UserController::class,'editProfile', EditProfileRequest::class);
 //$app->post('/add-product',CartController::class,'addProduct');
 //$app->post('/create-order',OrderController::class,'create' );
 //$app->post('/decrease-product',CartController::class,'decreaseProduct' );

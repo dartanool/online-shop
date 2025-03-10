@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use Model\User;
+use Request\EditProfileRequest;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 
@@ -91,32 +92,32 @@ class UserController extends BaseController
 //Edit Profile
 
 
-    public function editProfile($data) : void
+    public function editProfile(EditProfileRequest $request) : void
     {
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
 
-            $errors = $this->validateEdit($data);
+            $errors = $request->validateEdit();
 
             if (empty($errors)) //(!(isset($errors))) // или лучше empty  //  нет ошибок, массив пуст => true
             {
                 $user = $this->authService->getCurrentUser();
 
-                if (!(empty($data['name']))) // не пустой => true
+                if (!(empty($request->getName()))) // не пустой => true
                 {
-                    $name = $data['name'];
+                    $name = $request->getName();
                     $this->userModel->updateNameById($name, $user->getId());
 
                 }
 
-                if (!(empty($data['email']))) {
-                    $email = $data['email'];
+                if (!(empty($request->getEmail()))) {
+                    $email = $request->getEmail();
                     $this->userModel->updateEmailById($email, $user->getId());
                 }
 
-                if (!(empty($data['password']))) {
-                    $password = $data['password'];
+                if (!(empty($request->getPassword()))) {
+                    $password = $request->getPassword();
                     $this->userModel->updatePasswordById($password, $user->getId());
                 }
                 header('Location: /user-profile');
@@ -155,44 +156,4 @@ class UserController extends BaseController
 
 
 
-
-    private function validateEdit(array $data): array
-    {
-        $errors = [];
-
-        if (!(empty($data['name']))) // не пусто, имя ЕСТЬ => true
-        {
-            if (strlen($data['name']) < 3) {
-                $errors['name'] = "Name {$data['name']} too short";
-            }
-        }
-
-        if (!(empty($data['email']))) {
-            if (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
-                $errors['email'] = "Email {$data['email']} не валиден.";
-            } else {
-
-                $statement= $this->userModel->getByEmail($data['email']);
-
-                if (!empty($statement)) {
-                    $errors['email'] = "Email {$data['email']} already exists";
-                }
-            }
-        }
-
-        if (!(empty($data['password']))) {
-            if (!(empty($data['checkPassword']))) {
-                if (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
-                    preg_match('/[A-Z]/', $data['password']) &&
-                    preg_match('/[a-z]/', $data['password']) &&
-                    preg_match('/[0-9]/', $data['password']))) {
-                    $errors['password'] = "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
-
-                } elseif ($data['checkPassword'] !== $data['password']) {
-                    $errors['password'] = "Пароли не совпадают";
-                }
-            }
-        }
-        return $errors;
-    }
 }
