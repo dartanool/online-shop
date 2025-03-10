@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Model\Product;
 use Model\UserProduct;
+use Request\AddProductRequest;
 
 class CartController extends BaseController
 {
@@ -41,14 +42,14 @@ class CartController extends BaseController
 
 
     // Add and delete 1 product, if amount !=1
-    public function addProduct(array $data) : void
+    public function addProduct(AddProductRequest $request) : void
     {
         if (!$this->authService->check()) {
             header('Location: login');
         } else {
-
+//добавить валидацию
             $userId = $this->authService->getCurrentUser()->getId();
-            $productId = $data['product_id'];
+            $productId = $request->getProductId();
 
             $this->cartService->addProduct($productId, $userId);
 
@@ -56,13 +57,14 @@ class CartController extends BaseController
         }
     }
 
-    public function decreaseProduct(array $data) : void
+
+    public function decreaseProduct(AddProductRequest $request) : void
     {
         if (!$this->authService->check()){
             header('Location: login');
         } else {
             $userId = $this->authService->getCurrentUser()->getId();
-            $productId = $data['product_id'];
+            $productId = $request->getProductId();
 
             $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount();
 
@@ -73,26 +75,5 @@ class CartController extends BaseController
         }
     }
 
-    private function validateAddProduct(array $data): array
-    {
-        $errors = [];
-        $productId = (int)$data['product_id'];
-        $amount = (int)$data['amount'];
-        if (!isset($productId)) {
-            $errors['productId'] = "ProductController id incorrect";
-        } else {
 
-            $data = $this->productModel->getByProductId($productId);
-
-            if ($data === false) {
-                $errors['productId'] = "ProductController doesn't exist";
-            }
-        }
-
-        if (!isset($amount)) {
-            $errors['amount'] = "Amount incorrect";
-        }
-
-        return $errors;
-    }
 }
