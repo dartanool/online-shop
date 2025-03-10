@@ -4,6 +4,7 @@ use Controllers\UserController;
 use Controllers\ProductController;
 use Controllers\CartController;
 use Controllers\OrderController;
+use Request\RegistrateRequest;
 
 class App
 {
@@ -108,10 +109,13 @@ class App
 
                 $class = $handler['class'];
                 $method = $handler['method'];
+                $request = $handler['request']; //в метод пост добавить ниже
+
+                $requestObj = new $request($_POST);
 
 
                 $controller = new $class();
-                $controller ->$method($_POST);
+                $controller->$method($requestObj);
 
 
             } else {
@@ -123,21 +127,23 @@ class App
         }
     }
 
-    public function get(string $requestUri, string $class, string $method):void
+    public function get(string $requestUri, string $class, string $method, string $request):void
     {
 
         $this->routes[$requestUri]['GET'] = [
             'class' => $class,
             'method' => $method,
+            'request' => $request
         ];
     }
 
-    public function post(string $requestUri, string $class, string $method):void
+    public function post(string $requestUri, string $class, string $method, string $request):void
     {
 
         $this->routes[$requestUri]['POST'] = [
             'class' => $class,
             'method' => $method,
+            'request' => $request
         ];
     }
 }

@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use Model\User;
+use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
@@ -14,14 +15,14 @@ class UserController extends BaseController
     }
 
     //Registration
-    public function registrate(array $data) :void
+    public function registrate(RegistrateRequest $request) :void
     {
-        $errors = $this->validateRegistration($data);
+        $errors = $request->validateRegistration();
 
         if (empty($errors)) {
-            $name = $data['name'];
-            $email = $data['email'];
-            $password = $data['password'];
+            $name = $request->getName();
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -149,45 +150,6 @@ class UserController extends BaseController
     }
 
 
-    private function validateRegistration(array $data): array
-    {
-        $errors = [];
-
-        if (!(isset($data['name']))) {
-            $errors['name'] = "Name is not filled";
-        } elseif (strlen($data['name']) < 3) {
-            $errors['name'] = "Name {$data['name']} too short";
-        }
-
-        if (!(isset($data['password']))) {
-            $errors['password'] = "Password is not filled";
-        } elseif (!(isset($data['check_password']))) {
-
-            $errors['password'] = "Check_password is not filled";
-
-        } elseif (!((strlen($data['password']) > 4 && strlen($data['password']) < 72) &&
-            preg_match('/[A-Z]/', $data['password']) &&
-            preg_match('/[a-z]/', $data['password']) &&
-            preg_match('/[0-9]/', $data['password']))) {
-            $errors['password'] = "Пароль должен содержать от 4 до 72 символов, хотя бы одну строчную букву, хотя бы одну заглавную букву, хотя бы одну цифру.";
-        } elseif ($data['check_password'] !== $data['password']) {
-            $errors['password'] = "Пароли не совпадают";
-        }
-
-        if (!(isset($data['email']))) {
-            $errors['email'] = "Email is not filled";
-        } elseif (!(filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
-            $errors['email'] = "Email {$data['email']} не валиден.";
-        } else {
-
-            $statement = $this->userModel->getByEmail($data['email']);
-
-            if (!(empty($statement))) {
-                $errors['email'] = "Email {$data['email']} already exists";
-            }
-        }
-        return $errors;
-    }
 
 
     private function validateLogin(array $data): array
