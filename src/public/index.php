@@ -6,6 +6,7 @@ use Controllers\ProductController;
 use Controllers\UserController;
 use Core\App;
 use Core\Autoloader;
+use Request\LoginRequest;
 use Request\RegistrateRequest;
 
 require_once './../Core/Autoloader.php';
@@ -25,10 +26,10 @@ $app->get('/registration',UserController::class,'getRegistrate', RegistrateReque
 //$app->get('/add-product',CartController::class,'getCatalog');
 //$app->get('/user-profile',UserController::class,'getProfile' );
 //$app->get('/edit-user-profile', UserController::class,'getEditProfile');
-//$app->get('/login', UserController::class,'getLogin');
+$app->get('/login', UserController::class,'getLogin', LoginRequest::class);
 
 $app->post('/registration',UserController::class,'registrate', RegistrateRequest::class);
-//$app->post('/login', UserController::class,'login');
+$app->post('/login', UserController::class,'login', LoginRequest::class);
 //$app->post('/edit-user-profile', UserController::class,'editProfile');
 //$app->post('/add-product',CartController::class,'addProduct');
 //$app->post('/create-order',OrderController::class,'create' );

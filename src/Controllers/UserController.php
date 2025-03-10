@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use Model\User;
+use Request\LoginRequest;
 use Request\RegistrateRequest;
 
 class UserController extends BaseController
@@ -45,13 +46,13 @@ class UserController extends BaseController
     }
 
     //Login
-    public function login(array $data) : void
+    public function login(LoginRequest $request) : void
     {
         $errors = [];
-        $errors = $this->validateLogin($data);
+        $errors = $request->validateLogin();
 
         if (empty($errors)) {
-            $result = $this->authService->auth($data['username'], $data['password']);
+            $result = $this->authService->auth($request->getName(), $request->getPassword());
 
             if ($result) {
                 header("Location: /catalog");
@@ -152,18 +153,7 @@ class UserController extends BaseController
 
 
 
-    private function validateLogin(array $data): array
-    {
-        $errors = [];
-        if (!(isset($data['username']))) {
-            $errors = "username incorrect";
-        }
-        if (!(isset($data['password']))) {
-            $errors = "password incorrect";
-        }
 
-        return $errors;
-    }
 
 
     private function validateEdit(array $data): array
