@@ -76,6 +76,7 @@ class UserController extends BaseController
         require_once '../Views/login_form.php';
     }
 
+
 //User_profile
     public function getProfile()
     {
@@ -89,9 +90,8 @@ class UserController extends BaseController
         require_once '../Views/user_profile_page.php';
     }
 
+
 //Edit Profile
-
-
     public function editProfile(EditProfileRequest $request) : void
     {
         if (!$this->authService->check()) {
@@ -143,17 +143,11 @@ class UserController extends BaseController
     }
 
 //logout
-
     public function logout(): void
     {
         $this->authService->logout();
         header('Location: /login');
         exit();
     }
-
-
-
-
-
 
 }
