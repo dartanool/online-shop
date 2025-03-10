@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use DTO\OrderCreateDTO;
+use Model\User;
 use Model\UserProduct;
 use Model\Order;
 use Model\OrderProduct;
@@ -34,7 +36,7 @@ class OrderController extends BaseController
                 header('Location: /catalog');
                 exit();
             }
-            $newOrderProducts = $this->newOrderProducts($orderProducts);
+            $newOrderProducts = $this->newOrderProducts($user);
             $total = $this->totalOrderProducts($newOrderProducts);
             require_once '../Views/order_page.php';
         } else {
@@ -56,7 +58,7 @@ class OrderController extends BaseController
 
         foreach ($userOrders as $userOrder) {
             $orderProducts = $this->orderProductModel->getAllByOrderId($userOrder->getId());
-            $newOrderProducts = $this->newOrderProducts($orderProducts);
+            $newOrderProducts = $this->newOrderProducts($user);
             $userOrder->setTotal($this->totalOrderProducts($newOrderProducts));
             $newUserOrders[] = $userOrder;
         }
@@ -72,27 +74,27 @@ class OrderController extends BaseController
 
         $data = $_POST;
         $errors = $this->validate($data);
-        $userId = $this->authService->getCurrentUser()->getId();
+        $user = $this->authService->getCurrentUser();
 
-        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($userId);
-        $newOrderProducts = $this->newOrderProducts($orderProducts);
+        $newOrderProducts = $this->newOrderProducts($user);
         $total = $this->totalOrderProducts($newOrderProducts);
 
         if (empty($errors)) {
-            $orderId = $this->orderModel->create($data, $userId);
+            $dto = new OrderCreateDTO($data['name'], $data['phone'], $data['comment'], $data['address'], $user);
 
-            $this->orderService->create($orderId, $userId);
+            $this->orderService->create($dto);
 
             header('Location: /user-orders');
             exit();
         }else{
-            require_once '../Views/order_page.php';
+            require_once '../Views/order_pagdae.php';
         }
 
     }
 
-    private function newOrderProducts(array $orderProducts): array
+    private function newOrderProducts(User $user): array
     {
+        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($user-> getId());
         $newOrderProducts = [];
         foreach ($orderProducts as $orderProduct)
         {

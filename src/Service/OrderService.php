@@ -2,34 +2,40 @@
 
 namespace Service;
 
+use DTO\OrderCreateDTO;
 use Model\Order;
 use Model\OrderProduct;
-use Model\Product;
 use Model\UserProduct;
 
 class OrderService
 {
-    private Order $orderModel;
     private UserProduct $userProductModel;
-    private AuthService $authService;
     private OrderProduct $orderProductModel;
+    private Order $orderModel;
 
     public function __construct()
     {
-        $this->orderModel = new Order();
         $this->userProductModel = new UserProduct();
-        $this->authService = new AuthService();
         $this->orderProductModel = new OrderProduct();
+        $this->orderModel = new Order();
+
     }
 
-    public function create(int $orderId, int $userId)
+    public function create(OrderCreateDTO $data)
     {
-        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($userId);
+        $orderProducts = $this->userProductModel->getAllUserProductsByUserId($data->getUser()->getId());
+        $orderId = $this->orderModel->create(
+            $data->getName(),
+            $data->getPhone(),
+            $data->getComment(),
+            $data->getAddress(),
+            $data->getUser()->getId()
+        );
 
         foreach ($orderProducts as $orderProduct)
         {
             $this->orderProductModel->create($orderId, $orderProduct->getProductId(), $orderProduct->getAmount());
         }
-        $this->userProductModel->deleteByUserId($userId);
+        $this->userProductModel->deleteByUserId($data->getUser()->getId());
     }
 }
