@@ -6,8 +6,8 @@ use Controllers\ProductController;
 use Controllers\UserController;
 use Core\App;
 use Core\Autoloader;
+use Request\AddReviewRequest;
 use Request\GetProductIdRequest;
-use Request\BaseRequest;
 use Request\CreateOrderRequest;
 use Request\EditProfileRequest;
 use Request\LoginRequest;
@@ -39,7 +39,7 @@ $app->post('/add-product',CartController::class,'addProduct', GetProductIdReques
 $app->post('/create-order',OrderController::class,'create', CreateOrderRequest::class );
 $app->post('/decrease-product',CartController::class,'decreaseProduct', GetProductIdRequest::class );
 $app->post('/product',ProductController::class,'getProduct', GetProductIdRequest::class );
-//$app->post('/add-review',ProductController::class,'addReview' );
+$app->post('/add-review',ProductController::class,'addReview', AddReviewRequest::class );
 
 $app->run();
 

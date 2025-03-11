@@ -5,6 +5,7 @@ use Model\Product;
 use Model\Review;
 use Model\User;
 use Model\UserProduct;
+use Request\AddReviewRequest;
 use Request\GetProductIdRequest;
 
 class ProductController extends BaseController
@@ -62,20 +63,20 @@ class ProductController extends BaseController
         }
     }
 
-    public function addReview(array $data)
+    public function addReview(AddReviewRequest $request)
     {
         if (!$this->authService->check()){
             header('Location: login');
         } else {
-            $errors = $this->validateReview($data);
+            $errors = $request->validateReview();
 
             if (empty($errors)) {
 
                 $userName = $this->authService->getCurrentUser()->getName();
                 $userId =$this->authService->getCurrentUser()->getId();
-                $productId = $data['productId'];
-                $reviewText = $data['reviewText'];
-                $score = $data['score'];
+                $productId = $request->getProductId();
+                $reviewText = $request->getReviewText();
+                $score = $request->getScore();
 
                 $this->reviewModel->create($productId, $userId, $reviewText, $score);
 
@@ -86,24 +87,7 @@ class ProductController extends BaseController
         }
     }
 
-    private function validateReview(array $data): array
-    {
-        $errors = [];
-        $reviewText = $data['reviewText'];
-        $score = $data['score'];
 
-        if (!(isset($reviewText))) {
-            $errors['reviewText'] = "Review is not filled";
-        } elseif (strlen($reviewText) > 255) {
-            $errors['reviewText'] = "Review too long";
-        }
-
-        if (!(isset($score))) {
-            $errors['score'] = "Score is not filled";
-        }
-
-        return $errors;
-    }
 
     private function getAverageScore(array $reviews) : float
     {
