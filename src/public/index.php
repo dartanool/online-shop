@@ -20,17 +20,17 @@ Autoloader::register($path);
 
 $app = new App();
 
-$app->get('/registration',UserController::class,'getRegistrate', RegistrateRequest::class);
-$app->get('/user-orders', OrderController::class,'getAllOrders', CreateOrderRequest::class );
+$app->get('/registration',UserController::class,'getRegistrate');
+$app->get('/user-orders', OrderController::class,'getAllOrders' );
 //$app->get('/product',ProductController::class,'getProduct', GetProductIdRequest::class );
-$app->get('/catalog', ProductController::class,'getCatalog', RegistrateRequest::class );
-$app->get('/logout', UserController::class,'logout', RegistrateRequest::class  );
-$app->get('/cart', CartController::class,'getCart', RegistrateRequest::class );
-$app->get('/create-order',OrderController::class,'getCreateForm', CreateOrderRequest::class );
+$app->get('/catalog', ProductController::class,'getCatalog');
+$app->get('/logout', UserController::class,'logout');
+$app->get('/cart', CartController::class,'getCart' );
+$app->get('/create-order',OrderController::class,'getCreateForm' );
 //$app->get('/add-product',ProductController::class,'getCatalog',GetProductIdRequest::class );
-$app->get('/user-profile', UserController::class,'getProfile', EditProfileRequest::class );
-$app->get('/edit-user-profile', UserController::class,'getEditProfile', EditProfileRequest::class);
-$app->get('/login', UserController::class,'getLogin', LoginRequest::class);
+$app->get('/user-profile', UserController::class,'getProfile' );
+$app->get('/edit-user-profile', UserController::class,'getEditProfile');
+$app->get('/login', UserController::class,'getLogin');
 
 $app->post('/registration',UserController::class,'registrate', RegistrateRequest::class);
 $app->post('/login', UserController::class,'login', LoginRequest::class);

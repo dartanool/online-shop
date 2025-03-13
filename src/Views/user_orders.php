@@ -26,7 +26,7 @@
                         <td><?php echo $orderProduct->getProduct()->getPrice()?></td>
                         <td><?php echo $orderProduct->getProduct()->getTotalSum()?></td>
                     </tr>
-                <? endforeach; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
             <p>Сумма заказа <?php echo $newUserOrder->getTotal();?></p>

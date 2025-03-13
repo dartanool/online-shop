@@ -110,13 +110,14 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
                 $request = $handler['request']; //в метод пост добавить ниже
-
-                $requestObj = new $request($_POST);
-
-
                 $controller = new $class();
-                $controller->$method($requestObj);
 
+                if ($request !== null){
+                    $requestObj = new $request($_POST);
+                    $controller->$method($requestObj);
+                } else {
+                    $controller->$method($_POST);
+                }
 
             } else {
                 echo "$requestUri doesn't support $requestMethod";
@@ -127,7 +128,7 @@ class App
         }
     }
 
-    public function get(string $requestUri, string $class, string $method, string $request):void
+    public function get(string $requestUri, string $class, string $method, string $request = null):void
     {
 
         $this->routes[$requestUri]['GET'] = [
@@ -137,7 +138,7 @@ class App
         ];
     }
 
-    public function post(string $requestUri, string $class, string $method, string $request):void
+    public function post(string $requestUri, string $class, string $method, string $request = null):void
     {
 
         $this->routes[$requestUri]['POST'] = [
