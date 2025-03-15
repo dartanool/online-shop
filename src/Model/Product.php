@@ -7,7 +7,6 @@ class Product extends \Model\Model
     private int $price;
     private string|null $description;
     private string|null  $image_url;
-    private int $totalSum;
 
     protected function getTableName(): string
     {
@@ -83,13 +82,5 @@ class Product extends \Model\Model
         return $this->image_url;
     }
 
-    public function setTotalSum(int $totalSum): void
-    {
-        $this->totalSum = $totalSum;
-    }
 
-    public function getTotalSum(): int
-    {
-        return $this->totalSum;
-    }
 }

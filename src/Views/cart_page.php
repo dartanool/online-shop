@@ -1,9 +1,9 @@
 <html lang="en" dir="ltr">
 <h2>Cart</h2>
 <div class="product-grid">
-    <?php foreach ($newUserProducts as $newUserProduct):?>
+    <?php foreach ($userProducts as $userProduct):?>
         <div class="product-item">
-            <img class="product-image" src="<?php echo $newUserProduct->getProduct()->getImageUrl()?>" alt="<?php echo $newUserProduct->getProduct()->getName()?>" data-image-width="720" data-image-height="1080">
+            <img class="product-image" src="<?php echo $userProduct->getProduct()->getImageUrl()?>" alt="<?php echo $userProduct->getProduct()->getName()?>" data-image-width="720" data-image-height="1080">
             <table>
                 <thead>
                 <tr>
@@ -14,9 +14,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><?php echo $newUserProduct->getProduct()->getName()?></td>
-                        <td> <?php echo $newUserProduct->getAmount()?></td>
-                        <td><?php echo  ($newUserProduct->getProduct()->getPrice())*($newUserProduct->getAmount())?></td>
+                        <td><?php echo $userProduct->getProduct()->getName()?></td>
+                        <td> <?php echo $userProduct->getAmount()?></td>
+                        <td><?php echo  ($userProduct->getProduct()->getPrice())*($userProduct->getAmount())?></td>
                     </tr>
                 </tbody>
             </table>

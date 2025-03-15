@@ -25,16 +25,7 @@ class CartController extends BaseController
             header('Location: login');
         } else {
 
-            $user = $this->authService->getCurrentUser();
-
-            $userProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
-            $newUserProducts = [];
-            foreach ($userProducts as $userProduct)
-            {
-                $product = $this->productModel->getByProductId($userProduct->getProductId());
-                $userProduct->setProduct($product);
-                $newUserProducts[] = $userProduct;
-            }
+            $userProducts = $this->cartService->getUserProducts();
 
             require_once "../Views/cart_page.php";
         }
@@ -48,10 +39,9 @@ class CartController extends BaseController
             header('Location: login');
         } else {
 //добавить валидацию
-            $userId = $this->authService->getCurrentUser()->getId();
             $productId = $request->getProductId();
 
-            $this->cartService->addProduct($productId, $userId);
+            $this->cartService->addProduct($productId);
 
             header("Location: catalog");
         }
@@ -68,7 +58,7 @@ class CartController extends BaseController
 
             $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount();
 
-            $this->cartService->decreaseProduct($productId, $userId,$amount);
+            $this->cartService->decreaseProduct($productId, $amount);
 
             header("Location: catalog");
 

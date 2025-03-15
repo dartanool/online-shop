@@ -12,7 +12,7 @@ class Order extends \Model\Model
     private string|null $comment;
     private int $userId;
     private string $address;
-    private int $total;
+    private int $sum;
     private Product $products;
     private array $orderProducts;
 
@@ -105,13 +105,13 @@ class Order extends \Model\Model
         return $this->products;
     }
 
-    public function getTotal(): int
+    public function getSum(): int
     {
-        return $this->total;
+        return $this->sum;
     }
-    public function setTotal(int $total): void
+    public function setSum(int $sum): void
     {
-        $this->total = $total;
+        $this->sum = $sum;
     }
 
     public function setProducts(Product $products): void
@@ -129,7 +129,7 @@ class Order extends \Model\Model
     }
     public function getProduct(): Product
     {
-        return $this->product;
+        return $this->products;
     }
 
 }
