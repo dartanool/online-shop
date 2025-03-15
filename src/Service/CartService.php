@@ -4,20 +4,22 @@ namespace Service;
 
 use Model\Product;
 use Model\UserProduct;
+use Service\Auth\AuthInterface;
+use Service\Auth\AuthSessionService;
 
 class CartService
 {
     private UserProduct $userProductModel;
-    private AuthService $authService;
+    private AuthInterface $authService;
     private Product $productModel;
     public function __construct()
     {
         $this->userProductModel = new UserProduct();
-        $this->authService = new AuthService();
+        $this->authService = new AuthSessionService();
         $this->productModel = new Product();
     }
 
-    public function addProduct(int $productId)
+    public function addProduct(int $productId) : void
     {
         $user = $this->authService->getCurrentUser();
 
@@ -33,7 +35,7 @@ class CartService
         }
     }
 
-    public function decreaseProduct(int $productId,int $amount)
+    public function decreaseProduct(int $productId,int $amount) : void
     {
         $user = $this->authService->getCurrentUser();
         $userId = $user->getId();

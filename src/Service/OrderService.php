@@ -6,15 +6,16 @@ use DTO\OrderCreateDTO;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
-use Model\User;
 use Model\UserProduct;
+use Service\Auth\AuthInterface;
+use Service\Auth\AuthSessionService;
 
 class OrderService
 {
     private UserProduct $userProductModel;
     private OrderProduct $orderProductModel;
     private Order $orderModel;
-    private AuthService $authService;
+    private AuthInterface $authService;
     private Product $productModel;
 
     public function __construct()
@@ -22,11 +23,11 @@ class OrderService
         $this->userProductModel = new UserProduct();
         $this->orderProductModel = new OrderProduct();
         $this->orderModel = new Order();
-        $this->authService = new AuthService();
+        $this->authService = new AuthSessionService();
         $this->productModel = new Product();
     }
 
-    public function create(OrderCreateDTO $data)
+    public function create(OrderCreateDTO $data) : void
     {
         $user = $this->authService->getCurrentUser();
 
