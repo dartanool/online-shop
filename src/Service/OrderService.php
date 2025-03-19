@@ -17,6 +17,7 @@ class OrderService
     private Order $orderModel;
     private AuthInterface $authService;
     private Product $productModel;
+    private CartService $cartService;
 
     public function __construct()
     {
@@ -25,13 +26,22 @@ class OrderService
         $this->orderModel = new Order();
         $this->authService = new AuthSessionService();
         $this->productModel = new Product();
+        $this->cartService = new CartService();
     }
 
     public function create(OrderCreateDTO $data) : void
     {
+
+        $sum = $this->cartService->getSum();
+
+        if ($sum < 1000){
+            throw new \Exception('Для формирования заказа сумма заказа должна быть больше 1000 рублей');
+        }
+
         $user = $this->authService->getCurrentUser();
 
         $userProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
+
         $orderId = $this->orderModel->create(
             $data->getName(),
             $data->getPhone(),

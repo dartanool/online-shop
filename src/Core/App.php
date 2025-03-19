@@ -5,10 +5,13 @@ use Controllers\ProductController;
 use Controllers\CartController;
 use Controllers\OrderController;
 use Request\RegistrateRequest;
+use Service\Log\LogInterface;
+use Service\Log\LogFileService;
 
 class App
 {
     private array $routes;
+    private LogInterface $logService;
 
 //    private array $routes = [
 //        '/registration' => [
@@ -93,6 +96,10 @@ class App
 //        ]
 //    ];
 
+    public function __construct()
+    {
+        $this->logService = new LogFileService("../Storage/errors.txt");
+    }
     public function run() :void
     {
 
@@ -112,12 +119,21 @@ class App
                 $request = $handler['request']; //в метод пост добавить ниже
                 $controller = new $class();
 
-                if ($request !== null){
-                    $requestObj = new $request($_POST);
-                    $controller->$method($requestObj);
-                } else {
-                    $controller->$method($_POST);
+                try {
+
+                    if ($request !== null){
+                        $requestObj = new $request($_POST);
+                        $controller->$method($requestObj);
+                    } else {
+                        $controller->$method($_POST);
+                    }
+                } catch (\Throwable $exception) {
+
+                    require_once '../Views/500.php';
+                    $this->logService->log($exception);
+
                 }
+
 
             } else {
                 echo "$requestUri doesn't support $requestMethod";
