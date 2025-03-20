@@ -10,3 +10,13 @@
 Файл: /var/www/html/src/Controllers/CartController.php
 Строка: 59
 Время: 2025-03-20 12:49:20
+
+Ошибка: Call to a member function getAmount() on null
+Файл: /var/www/html/src/Controllers/CartController.php
+Строка: 59
+Время: 2025-03-20 12:51:10
+
+Время: 2025-03-20 12:51:53
+Ошибка: Call to a member function getAmount() on null
+Файл: /var/www/html/src/Controllers/CartController.php
+Строка: 59

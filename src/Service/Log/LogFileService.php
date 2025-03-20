@@ -10,11 +10,11 @@ class LogFileService implements LogInterface
     {
         $currentTime = date('Y-m-d H:i:s');
         $fileName = "../Storage/errors.txt";
-        $message = "Ошибка: " . $exception->getMessage() .
+        $message = "\nВремя: ". $currentTime.
+                    "\nОшибка: " . $exception->getMessage() .
                     "\nФайл: " . $exception->getFile() .
                     "\nСтрока: " . $exception->getLine() .
-                    "\nВремя: ". $currentTime.
-            "\n";
+                    "\n";
 
         file_put_contents($fileName, $message, FILE_APPEND);
     }
