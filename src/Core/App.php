@@ -47,9 +47,9 @@ class App
                         $controller->$method($_POST);
                     }
                 } catch (\Throwable $exception) {
+                    $this->logService->log($exception);
 
                     require_once '../Views/500.php';
-                    $this->logService->log($exception);
 
                 }
 
