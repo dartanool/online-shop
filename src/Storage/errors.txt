@@ -1,0 +1,4 @@
+Ошибка: Call to a member function getAmount() on null
+Файл: /var/www/html/src/Controllers/CartController.php
+Строка: 59
+Время: 2025-03-20 10:23:18
