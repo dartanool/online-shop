@@ -25,3 +25,28 @@
 Ошибка: Call to a member function getAmount() on null
 Файл: /var/www/html/src/Controllers/CartController.php
 Строка: 59
+
+Время: 2025-03-23 11:10:59
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-23 11:12:25
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-23 11:12:53
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-23 11:15:53
+Ошибка: Cannot assign null to property Model\Product::$name of type string
+Файл: /var/www/html/src/Model/Product.php
+Строка: 54
+
+Время: 2025-03-23 11:17:40
+Ошибка: Cannot assign null to property Model\Product::$name of type string
+Файл: /var/www/html/src/Model/Product.php
+Строка: 54

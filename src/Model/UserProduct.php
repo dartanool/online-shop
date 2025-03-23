@@ -14,7 +14,7 @@ class UserProduct extends \Model\Model
     {
         return 'user_products';
     }
-    public function getAllUserProductsByUserId(int $id) : array | null
+    public function getAllByUserId(int $id) : array | null
     {
 
         $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE user_id = {$id}");
@@ -29,6 +29,28 @@ class UserProduct extends \Model\Model
 
         foreach ($orders as $order) {
             $obj = $this->createObject($order);
+            $objs[] = $obj;
+        }
+
+        return $objs;
+    }
+
+    public function getAllByUserIdWithProducts(int $id) : array | null
+    {
+
+        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} up
+                                                INNER JOIN products p ON up.product_id = p.id WHERE user_id = {$id} ");
+
+        $userProducts = $statement->fetchAll();
+
+        if ($userProducts === false) {
+            return null;
+        }
+
+        $objs = [];
+
+        foreach ($userProducts as $userProduct) {
+            $obj = $this->createObject($userProduct);
             $objs[] = $obj;
         }
 
@@ -90,6 +112,20 @@ class UserProduct extends \Model\Model
         $obj->userId = $data['user_id'];
         $obj->productId = $data['product_id'];
         $obj->amount = $data['amount'];
+
+        if (isset($data['name'])){
+            $productData = [
+                'id' => $data['product_id'],
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'price' => $data['price'],
+                'image_url' => $data['image_url']
+            ];
+
+            $product = Product::createObject($productData);
+            $obj->setProduct($product);
+        }
+
 
         return $obj;
     }

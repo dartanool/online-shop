@@ -40,7 +40,7 @@ class OrderService
 
         $user = $this->authService->getCurrentUser();
 
-        $userProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
+        $userProducts = $this->userProductModel->getAllByUserId($user->getId());
 
         $orderId = $this->orderModel->create(
             $data->getName(),

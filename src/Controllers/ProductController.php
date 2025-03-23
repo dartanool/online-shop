@@ -32,7 +32,7 @@ class ProductController extends BaseController
 
             $products = $this->productModel->getById();
 
-            $userProducts =$this->userProductModel->getAllUserProductsByUserId($this->authService->getCurrentUser()->getId());
+            $userProducts =$this->userProductModel->getAllByUserId($this->authService->getCurrentUser()->getId());
 
 
             require_once "../Views/catalog_page.php";

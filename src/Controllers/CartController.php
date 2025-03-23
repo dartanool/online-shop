@@ -7,14 +7,12 @@ use Request\GetProductIdRequest;
 
 class CartController extends BaseController
 {
-    private Product $productModel;
     private UserProduct $userProductModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->userProductModel = new UserProduct();
-        $this->productModel = new Product();
     }
 
     //UserProduct

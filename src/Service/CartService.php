@@ -56,12 +56,10 @@ class CartService
             return [];
         }
 
-        $userProducts = $this->userProductModel->getAllUserProductsByUserId($user->getId());
+        $userProducts = $this->userProductModel->getAllByUserIdWithProducts($user->getId());
 
         foreach ($userProducts as $userProduct)
         {
-            $product = $this->productModel->getByProductId($userProduct->getProductId());
-            $userProduct->setProduct($product);
             $totalSum = $userProduct->getAmount() * $userProduct->getProduct()->getPrice();
             $userProduct->setTotalSum($totalSum);
         }

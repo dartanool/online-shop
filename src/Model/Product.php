@@ -44,7 +44,7 @@ class Product extends \Model\Model
         return $this->createObject($data);
     }
 
-    private function createObject(array $data) : self
+    public static function createObject(array $data) : self
     {
         $obj = new self();
 
