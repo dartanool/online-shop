@@ -8,14 +8,6 @@ use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
-    protected User $userModel;
-    public function __construct()
-    {
-        parent::__construct();
-        $this->userModel = new User();
-
-    }
-
     //Registration
     public function registrate(RegistrateRequest $request) :void
     {
@@ -28,7 +20,7 @@ class UserController extends BaseController
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            $this->userModel->insertNameEmailPassword($name, $email, $password);
+            User::insertNameEmailPassword($name, $email, $password);
 
         }
         require_once '../Views/registration_form.php';
@@ -85,7 +77,7 @@ class UserController extends BaseController
         } else {
 
             $userId = $this->authService->getCurrentUser()->getId();
-            $user = $this->userModel->getById($userId);
+            $user = User::getById($userId);
         }
         require_once '../Views/user_profile_page.php';
     }
@@ -107,18 +99,18 @@ class UserController extends BaseController
                 if (!(empty($request->getName()))) // не пустой => true
                 {
                     $name = $request->getName();
-                    $this->userModel->updateNameById($name, $user->getId());
+                    User::updateNameById($name, $user->getId());
 
                 }
 
                 if (!(empty($request->getEmail()))) {
                     $email = $request->getEmail();
-                    $this->userModel->updateEmailById($email, $user->getId());
+                    User::updateEmailById($email, $user->getId());
                 }
 
                 if (!(empty($request->getPassword()))) {
                     $password = $request->getPassword();
-                    $this->userModel->updatePasswordById($password, $user->getId());
+                    User::updatePasswordById($password, $user->getId());
                 }
                 header('Location: /user-profile');
                 exit;
@@ -126,7 +118,7 @@ class UserController extends BaseController
 
         }
         $userId = $this->authService->getCurrentUser()->getId();
-        $user = $this->userModel->getById($userId);
+        $user = User::getById($userId);
         require_once '../Views/edit_user_profile_form.php';
     }
 
@@ -137,7 +129,7 @@ class UserController extends BaseController
             header('Location: /login');
         }
 
-        $user = $this->userModel->getById($this->authService->getCurrentUser()->getId());
+        $user = User::getById($this->authService->getCurrentUser()->getId());
 
         require_once '../Views/edit_user_profile_form.php';
     }

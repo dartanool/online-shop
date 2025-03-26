@@ -8,36 +8,37 @@ class User extends \Model\Model
     private string $email;
     private string $password;
 
-    protected function getTableName() : string
+    protected static function getTableName() : string
     {
         return 'users';
     }
-    public function insertNameEmailPassword(string $name,string $email,string $password) : void
+    public static function insertNameEmailPassword(string $name,string $email,string $password) : void
     {
-        $statement = $this->pdo->prepare(
-            "INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare(
+            "INSERT INTO $tableName (name, email, password) VALUES (:name, :email, :password)");
         $statement->execute([':name' => $name, ':email' => $email, ':password' => $password]);
     }
-    public function getById(int $id) :self | null
+    public static function getById(int $id) :self | null
     {
-
-        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE id = {$id}");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->query("SELECT * FROM $tableName WHERE id = {$id}");
         $user = $statement->fetch();
 
         if ($user === false) {
             return null;
         }
 
-        $obj = $this->createObject($user);
+        $obj = static::createObject($user);
 
         return $obj;
     }
 
 
-    public function getByEmail(string $email) : self | null// add false
+    public static function getByEmail(string $email) : self | null// add false
     {
-
-        $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare("SELECT * FROM $tableName WHERE email = :email");
         $statement->execute([':email' => $email]);
 
         $result = $statement->fetch();
@@ -46,33 +47,35 @@ class User extends \Model\Model
             return null;
         }
 
-        $obj = $this->createObject($result);
+        $obj = static::createObject($result);
 
         return $obj;
     }
 
-    public function updateEmailById(string $email,int $id) : void
+    public static function updateEmailById(string $email,int $id) : void
     {
 
-        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = {$id}");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare("UPDATE $tableName SET email = :email WHERE id = {$id}");
         $statement->execute([':email' => $email]);
     }
 
-    public function updateNameById(string $name,int $id) : void
+    public static function updateNameById(string $name,int $id) : void
     {
-
-        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = {$id}");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare("UPDATE $tableName SET name = :name WHERE id = {$id}");
         $statement->execute([':name' => $name]);
     }
 
-    public function updatePasswordById(string $password, int $id) : void
+    public static function updatePasswordById(string $password, int $id) : void
     {
 
-        $statement = $this->pdo->prepare("UPDATE {$this->getTableName()} SET password = :password WHERE id = {$id}");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare("UPDATE $tableName SET password = :password WHERE id = {$id}");
         $statement->execute([':password' => $password]);
     }
 
-    private function createObject(array $data) : self
+    private static function createObject(array $data) : self
     {
         $obj = new self();
 

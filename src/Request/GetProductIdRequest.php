@@ -6,10 +6,8 @@ use Model\Product;
 
 class GetProductIdRequest
 {
-    private Product $productModel;
     public function __construct(private array $data)
     {
-        $this->productModel = new Product();
     }
 
     public function getProductId() : int
@@ -26,7 +24,7 @@ class GetProductIdRequest
             $errors['productId'] = "ProductController id incorrect";
         } else {
 
-            $data = $this->productModel->getByProductId($productId);
+            $data = Product::getByProductId($productId);
 
             if ($data === false) {
                 $errors['productId'] = "ProductController doesn't exist";

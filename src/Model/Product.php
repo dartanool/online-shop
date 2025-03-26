@@ -8,14 +8,15 @@ class Product extends \Model\Model
     private string|null $description;
     private string|null  $image_url;
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'products';
     }
-    public function getById() : array | null
+    public static function getById() : array | null
     {
 
-        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()}");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->query("SELECT * FROM $tableName");
 
         $products = $statement->fetchAll();
 
@@ -25,15 +26,16 @@ class Product extends \Model\Model
 
         $objs = [];
         foreach ($products as $product) {
-            $objs[] = $this->createObject($product);
+            $objs[] = static::createObject($product);
         }
         return $objs;
     }
 
-    public function getByProductId(int $productId) : self | null
+    public static function getByProductId(int $productId) : self | null
     {
 
-        $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :productId");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare("SELECT * FROM $tableName WHERE id = :productId");
         $statement->execute([':productId' => $productId]);
 
         $data = $statement->fetch();
@@ -41,7 +43,7 @@ class Product extends \Model\Model
         if ($data === false){
             return null;
         }
-        return $this->createObject($data);
+        return static::createObject($data);
     }
 
     public static function createObject(array $data) : self

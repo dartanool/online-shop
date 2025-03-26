@@ -10,19 +10,6 @@ use Request\GetProductIdRequest;
 
 class ProductController extends BaseController
 {
-    private Product $productModel;
-    private UserProduct $userProductModel;
-    private Review $reviewModel;
-    private User $userModel;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->productModel = new Product();
-        $this->userProductModel = new UserProduct();
-        $this->reviewModel = new Review();
-        $this->userModel = new User();
-    }
     //Catalog
     public function getCatalog() : void
     {
@@ -30,9 +17,9 @@ class ProductController extends BaseController
             header('Location: login');
         } else {
 
-            $products = $this->productModel->getById();
+            $products = Product::getById();
 
-            $userProducts =$this->userProductModel->getAllByUserId($this->authService->getCurrentUser()->getId());
+            $userProducts = UserProduct::getAllByUserId($this->authService->getCurrentUser()->getId());
 
 
             require_once "../Views/catalog_page.php";
@@ -47,14 +34,14 @@ class ProductController extends BaseController
             $productId = $request->getProductId();
             $userId =$this->authService->getCurrentUser()->getId();
 
-            $product = $this->productModel->getByProductId($productId);
-            $reviews = $this->reviewModel->getByProductId($productId);
+            $product = Product::getByProductId($productId);
+            $reviews = Review::getByProductId($productId);
 
             $averageScore = $this->getAverageScore($reviews);
 
             foreach ($reviews as $review){
                 $userId = $review->getUserId();
-                $userName = $this->userModel->getById($userId)->getName();
+                $userName = User::getById($userId)->getName();
                 $review->setUserName($userName);
 
             }
@@ -78,7 +65,7 @@ class ProductController extends BaseController
                 $reviewText = $request->getReviewText();
                 $score = $request->getScore();
 
-                $this->reviewModel->create($productId, $userId, $reviewText, $score);
+                Review::create($productId, $userId, $reviewText, $score);
 
                 header('Location: catalog');
             }

@@ -11,25 +11,26 @@ class OrderProduct extends \Model\Model
     private Product $product;
     private int $sum;
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'order_products';
     }
-    public function create(int $orderId, int $productId, int $amount)
+    public static function create(int $orderId, int $productId, int $amount) : void
     {
-        $stmt = $this->pdo->prepare
-        (
-            "INSERT INTO {$this->getTableName()}(order_id, product_id, amount) VALUES (:order_id, :product_id, :amount)"
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare(
+            "INSERT INTO $tableName (order_id, product_id, amount) VALUES (:order_id, :product_id, :amount)"
         );
-        $stmt->execute(['order_id' => $orderId, 'product_id' => $productId, 'amount' => $amount]);
+        $statement->execute(['order_id' => $orderId, 'product_id' => $productId, 'amount' => $amount]);
     }
-    public function getAllByOrderIdWithProducts(int $orderId): array | null
+    public static function getAllByOrderIdWithProducts(int $orderId): array | null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} t1
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare("SELECT * FROM $tableName t1
                                             INNER JOIN products t2 ON t1.product_id = t2.id
                                             WHERE order_id = :orderId");
-        $stmt->execute(['orderId' => $orderId]);
-        $orderProducts = $stmt->fetchAll();
+        $statement->execute(['orderId' => $orderId]);
+        $orderProducts = $statement->fetchAll();
 
         if ($orderProducts === false) {
             return null;
@@ -37,7 +38,7 @@ class OrderProduct extends \Model\Model
 
         $objs =[];
         foreach ($orderProducts as $orderProduct) {
-            $objs[] = $this->createObject($orderProduct);
+            $objs[] = static::createObject($orderProduct);
         }
 
         return $objs;

@@ -5,24 +5,17 @@ namespace Service;
 use DTO\OrderCreateDTO;
 use Model\Order;
 use Model\OrderProduct;
-use Model\Product;
 use Model\UserProduct;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
 
 class OrderService
 {
-    private UserProduct $userProductModel;
-    private OrderProduct $orderProductModel;
-    private Order $orderModel;
     private AuthInterface $authService;
     private CartService $cartService;
 
     public function __construct()
     {
-        $this->userProductModel = new UserProduct();
-        $this->orderProductModel = new OrderProduct();
-        $this->orderModel = new Order();
         $this->authService = new AuthSessionService();
         $this->cartService = new CartService();
     }
@@ -38,9 +31,9 @@ class OrderService
 
         $user = $this->authService->getCurrentUser();
 
-        $userProducts = $this->userProductModel->getAllByUserId($user->getId());
+        $userProducts = UserProduct::getAllByUserId($user->getId());
 
-        $orderId = $this->orderModel->create(
+        $orderId = Order::create(
             $data->getName(),
             $data->getPhone(),
             $data->getComment(),
@@ -50,20 +43,20 @@ class OrderService
 
         foreach ($userProducts as $userProduct)
         {
-            $this->orderProductModel->create($orderId, $userProduct->getProductId(), $userProduct->getAmount());
+            OrderProduct::create($orderId, $userProduct->getProductId(), $userProduct->getAmount());
         }
-        $this->userProductModel->deleteByUserId($user->getId());
+        UserProduct::deleteByUserId($user->getId());
     }
 
     public function getAll() : array
     {
         $user = $this->authService->getCurrentUser();
 
-        $orders = $this->orderModel->getAllByUserId($user->getId());
+        $orders = Order::getAllByUserId($user->getId());
 
         foreach ($orders as $order){
             $totalSum = 0;
-            $orderProducts = $this->orderProductModel->getAllByOrderIdWithProducts($order->getId());
+            $orderProducts = OrderProduct::getAllByOrderIdWithProducts($order->getId());
             foreach ($orderProducts as $orderProduct)
             {
                 $itemSum = $orderProduct->getAmount() * $orderProduct->getProduct()->getPrice();

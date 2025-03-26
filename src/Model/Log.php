@@ -5,10 +5,11 @@ namespace Model;
 class Log extends Model
 {
 
-    public function create(string $message, string $file, string $line) : void
+    public static function create(string $message, string $file, string $line) : void
     {
-        $statement = $this->pdo->prepare("
-                        INSERT INTO {$this->getTableName()}(message, file, line)
+        $tableName = static ::getTableName();
+        $statement = static::getPDO()->prepare("
+                        INSERT INTO $tableName (message, file, line)
                         VALUES (:message, :file, :line)"
         );
         $statement->execute(['message' => $message,
@@ -16,7 +17,7 @@ class Log extends Model
                             'line' => $line]);
     }
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'logs';
     }

@@ -1,11 +1,5 @@
 <?php
 namespace Core;
-use Controllers\UserController;
-use Controllers\ProductController;
-use Controllers\CartController;
-use Controllers\OrderController;
-use Request\RegistrateRequest;
-use Service\Log\LogDbService;
 use Service\Log\LogInterface;
 use Service\Log\LogFileService;
 

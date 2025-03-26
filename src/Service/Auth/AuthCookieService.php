@@ -6,10 +6,8 @@ use Model\User;
 
 class AuthCookieService implements AuthInterface
 {
-    protected User $userModel;
     public function __construct()
     {
-        $this->userModel = new User();
     }
 
     public function getCurrentUser() : User | null
@@ -17,7 +15,7 @@ class AuthCookieService implements AuthInterface
         if ( $this->check()) {
             $userId = $_COOKIE['userId'];
 
-            return $this->userModel->getById($userId);
+            return User::getById($userId);
         }else{
             return null;
         }
@@ -30,7 +28,7 @@ class AuthCookieService implements AuthInterface
 
     public function auth(string $email, string $password) :bool
     {
-        $user = $this->userModel->getByEmail($email);
+        $user = User::getByEmail($email);
 
         if (!$user) {
             return false;

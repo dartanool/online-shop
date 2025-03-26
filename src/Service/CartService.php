@@ -2,18 +2,15 @@
 
 namespace Service;
 
-use Model\Product;
 use Model\UserProduct;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
 
 class CartService
 {
-    private UserProduct $userProductModel;
     private AuthInterface $authService;
     public function __construct()
     {
-        $this->userProductModel = new UserProduct();
         $this->authService = new AuthSessionService();
     }
 
@@ -22,14 +19,14 @@ class CartService
         $user = $this->authService->getCurrentUser();
 
         $amount = 1;
-        $data = $this->userProductModel->getByUserIdProductId($user->getId(), $productId);
+        $data = UserProduct::getByUserIdProductId($user->getId(), $productId);
 
         if (!isset($data)) {
-            $this->userProductModel->insertByIdProductIdAmount($user->getId(), $productId, $amount);
+            UserProduct::insertByIdProductIdAmount($user->getId(), $productId, $amount);
         } else {
             $amount = $data->getAmount() + $amount;
             // update
-            $this->userProductModel->updateAmountByUserIdProductId($user->getId(), $productId, $amount);
+            UserProduct::updateAmountByUserIdProductId($user->getId(), $productId, $amount);
         }
     }
 
@@ -39,10 +36,10 @@ class CartService
         $userId = $user->getId();
 
         if ($amount === 1) {
-            $this->userProductModel->decreaseByUserIdProductId($userId, $productId);
+            UserProduct::decreaseByUserIdProductId($userId, $productId);
         }  else {
             $amount = $amount - 1;
-            $this->userProductModel->updateAmountByUserIdProductId($userId, $productId, $amount);
+            UserProduct::updateAmountByUserIdProductId($userId, $productId, $amount);
         }
     }
 
@@ -54,7 +51,7 @@ class CartService
             return [];
         }
 
-        $userProducts = $this->userProductModel->getAllByUserIdWithProducts($user->getId());
+        $userProducts = UserProduct::getAllByUserIdWithProducts($user->getId());
 
         foreach ($userProducts as $userProduct)
         {

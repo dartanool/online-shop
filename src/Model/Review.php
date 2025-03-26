@@ -12,15 +12,16 @@ class Review extends Model
     private string $userName;
     private string $createdAt;
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'reviews';
     }
 
-    public function create(int $productId, int $userId, string $text, int $score) :void
+    public static function create(int $productId, int $userId, string $text, int $score) :void
     {
-        $statement = $this->pdo->prepare(
-            "INSERT INTO {$this->getTableName()}(product_id, user_id, review_text, score) 
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->prepare(
+            "INSERT INTO $tableName (product_id, user_id, review_text, score) 
                     VALUES (:productId, :userId, :text, :score) ");
         $statement->execute([
             'productId' => $productId,
@@ -29,9 +30,10 @@ class Review extends Model
             'score' => $score]);
     }
 
-    public function getByProductId(int $productId) : array|null
+    public static function getByProductId(int $productId) : array|null
     {
-        $statement = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE product_id = {$productId}");
+        $tableName = static::getTableName();
+        $statement = static::getPDO()->query("SELECT * FROM $tableName WHERE product_id = {$productId}");
         $reviews = $statement->fetchAll();
 
         if ($reviews === false){
@@ -41,13 +43,13 @@ class Review extends Model
         $objs = [];
         foreach ($reviews as $review){
 
-            $objs[] = $this->createObject($review);
+            $objs[] = static::createObject($review);
 
         }
 
         return $objs;
     }
-        private function createObject(array $data): self
+        private static function createObject(array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];

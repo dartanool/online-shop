@@ -4,17 +4,10 @@ namespace Controllers;
 
 use DTO\OrderCreateDTO;
 use Request\CreateOrderRequest;
-use Service\CartService;
 
 
 class OrderController extends BaseController
 {
-    protected CartService $cartService;
-    public function __construct()
-    {
-        parent::__construct();
-        $this->cartService = new CartService();
-    }
 
     public function getCreateForm()
     {
@@ -44,7 +37,7 @@ class OrderController extends BaseController
 
         require_once '../Views/user_orders.php';
     }
-    public function create(CreateOrderRequest $request)
+    public function create(CreateOrderRequest $request) : void
     {
         if (!$this->authService->check()) {
             header('Location: /login');

@@ -6,10 +6,8 @@ use Model\User;
 
 class EditProfileRequest
 {
-    private User $userModel;
     public function __construct(private array $data)
     {
-        $this->userModel = new User();
     }
 
     public function getName(): string
@@ -43,7 +41,7 @@ class EditProfileRequest
                 $errors['email'] = "Email {$this->data['email']} не валиден.";
             } else {
 
-                $statement= $this->userModel->getByEmail($this->data['email']);
+                $statement = User::getByEmail($this->data['email']);
 
                 if (!empty($statement)) {
                     $errors['email'] = "Email {$this->data['email']} already exists";

@@ -1,20 +1,11 @@
 <?php
 namespace Controllers;
 
-use Model\Product;
 use Model\UserProduct;
 use Request\GetProductIdRequest;
 
 class CartController extends BaseController
 {
-    private UserProduct $userProductModel;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->userProductModel = new UserProduct();
-    }
-
     //UserProduct
     public function getCart() : void
     {
@@ -54,7 +45,7 @@ class CartController extends BaseController
             $userId = $this->authService->getCurrentUser()->getId();
             $productId = $request->getProductId();
 
-            $amount = $this->userProductModel->getByUserIdProductId($userId, $productId)->getAmount();
+            $amount = UserProduct::getByUserIdProductId($userId, $productId)->getAmount();
 
             $this->cartService->decreaseProduct($productId, $amount);
 
