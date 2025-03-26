@@ -11,12 +11,10 @@ class CartService
 {
     private UserProduct $userProductModel;
     private AuthInterface $authService;
-    private Product $productModel;
     public function __construct()
     {
         $this->userProductModel = new UserProduct();
         $this->authService = new AuthSessionService();
-        $this->productModel = new Product();
     }
 
     public function addProduct(int $productId) : void
@@ -69,7 +67,9 @@ class CartService
     public function getSum(): int
     {
         $total = 0;
-        foreach ($this->getUserProducts() as $userProduct)
+        $userProducts = $this->getUserProducts();
+
+        foreach ($userProducts as $userProduct)
         {
             $total += $userProduct->getAmount() * $userProduct->getProduct()->getPrice();
         }

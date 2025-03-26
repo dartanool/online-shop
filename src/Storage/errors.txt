@@ -50,3 +50,78 @@
 Ошибка: Cannot assign null to property Model\Product::$name of type string
 Файл: /var/www/html/src/Model/Product.php
 Строка: 54
+
+Время: 2025-03-25 10:46:56
+Ошибка: Call to undefined method Model\Order::getProductId()
+Файл: /var/www/html/src/Service/OrderService.php
+Строка: 67
+
+Время: 2025-03-25 11:20:10
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-25 11:21:34
+Ошибка: Для формирования заказа сумма заказа должна быть больше 1000 рублей
+Файл: /var/www/html/src/Service/OrderService.php
+Строка: 38
+
+Время: 2025-03-25 11:24:08
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-25 11:24:36
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-25 11:26:35
+Ошибка: Cannot assign null to property Model\Product::$id of type int
+Файл: /var/www/html/src/Model/Product.php
+Строка: 51
+
+Время: 2025-03-25 11:27:10
+Ошибка: Model\Order::setOrderProducts(): Argument #1 ($orderProducts) must be of type Model\OrderProduct, array given, called in /var/www/html/src/Service/OrderService.php on line 76
+Файл: /var/www/html/src/Model/Order.php
+Строка: 173
+
+Время: 2025-03-25 11:27:25
+Ошибка: Model\Order::setOrderProducts(): Argument #1 ($orderProducts) must be of type Model\OrderProduct, array given, called in /var/www/html/src/Service/OrderService.php on line 76
+Файл: /var/www/html/src/Model/Order.php
+Строка: 173
+
+Время: 2025-03-25 11:28:22
+Ошибка: Model\Order::setOrderProducts(): Argument #1 ($orderProducts) must be of type Model\OrderProduct, array given, called in /var/www/html/src/Service/OrderService.php on line 76
+Файл: /var/www/html/src/Model/Order.php
+Строка: 173
+
+Время: 2025-03-25 11:37:52
+Ошибка: Model\Order::setOrderProducts(): Argument #1 ($orderProducts) must be of type Model\OrderProduct, array given, called in /var/www/html/src/Service/OrderService.php on line 76
+Файл: /var/www/html/src/Model/Order.php
+Строка: 175
+
+Время: 2025-03-26 10:08:31
+Ошибка: Model\Order::setOrderProducts(): Argument #1 ($orderProducts) must be of type Model\OrderProduct, array given, called in /var/www/html/src/Service/OrderService.php on line 76
+Файл: /var/www/html/src/Model/Order.php
+Строка: 175
+
+Время: 2025-03-26 10:13:10
+Ошибка: Call to undefined method Model\Order::setOrderProducts()
+Файл: /var/www/html/src/Service/OrderService.php
+Строка: 76
+
+Время: 2025-03-26 10:13:37
+Ошибка: Model\Order::setOrderProduct(): Argument #1 ($orderProduct) must be of type Model\OrderProduct, array given, called in /var/www/html/src/Service/OrderService.php on line 76
+Файл: /var/www/html/src/Model/Order.php
+Строка: 175
+
+Время: 2025-03-26 10:22:36
+Ошибка: Для формирования заказа сумма заказа должна быть больше 1000 рублей
+Файл: /var/www/html/src/Service/OrderService.php
+Строка: 36
+
+Время: 2025-03-26 10:23:03
+Ошибка: Для формирования заказа сумма заказа должна быть больше 100 рублей
+Файл: /var/www/html/src/Service/OrderService.php
+Строка: 36

@@ -13,7 +13,7 @@ class Order extends \Model\Model
     private int $userId;
     private string $address;
     private int $sum;
-    private Product $products;
+    private Product $product;
     private array $orderProducts;
 
     protected function getTableName(): string
@@ -56,9 +56,12 @@ class Order extends \Model\Model
 
         return $objs;
     }
+
     private function createObject(array $data) : self
     {
         $obj = new self ();
+
+//        print_r($data);
 
         $obj->id = $data['id'];
         $obj->contact_name = $data['contact_name'];
@@ -100,9 +103,9 @@ class Order extends \Model\Model
         return $this->address;
     }
 
-    public function getProducts(): Product
+    public function getProduct(): Product
     {
-        return $this->products;
+        return $this->product;
     }
 
     public function getSum(): int
@@ -114,9 +117,9 @@ class Order extends \Model\Model
         $this->sum = $sum;
     }
 
-    public function setProducts(Product $products): void
+    public function setProduct(Product $product): void
     {
-        $this->products = $products;
+        $this->product = $product;
     }
 
     public function getOrderProducts(): array
@@ -126,10 +129,6 @@ class Order extends \Model\Model
     public function setOrderProducts(array $orderProducts): void
     {
         $this->orderProducts = $orderProducts;
-    }
-    public function getProduct(): Product
-    {
-        return $this->products;
     }
 
 }

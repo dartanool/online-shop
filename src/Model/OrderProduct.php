@@ -23,9 +23,11 @@ class OrderProduct extends \Model\Model
         );
         $stmt->execute(['order_id' => $orderId, 'product_id' => $productId, 'amount' => $amount]);
     }
-    public function getAllByOrderId(int $orderId): array | null
+    public function getAllByOrderIdWithProducts(int $orderId): array | null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE order_id = :orderId");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} t1
+                                            INNER JOIN products t2 ON t1.product_id = t2.id
+                                            WHERE order_id = :orderId");
         $stmt->execute(['orderId' => $orderId]);
         $orderProducts = $stmt->fetchAll();
 
@@ -41,7 +43,7 @@ class OrderProduct extends \Model\Model
         return $objs;
     }
 
-    private function createObject(array $data) : self
+    public static function createObject(array $data) : self
     {
         $obj = new self();
 
@@ -49,6 +51,20 @@ class OrderProduct extends \Model\Model
         $obj->orderId = $data['order_id'];
         $obj->productId = $data['product_id'];
         $obj->amount = $data['amount'];
+
+
+        if (isset($data['name'])){
+            $productData = [
+                'id' => $data['product_id'],
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'price' => $data['price'],
+                'image_url' => $data['image_url']
+            ];
+
+            $product = Product::createObject($productData);
+            $obj->setProduct($product);
+        }
 
         return $obj;
     }
