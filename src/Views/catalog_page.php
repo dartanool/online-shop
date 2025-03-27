@@ -12,25 +12,24 @@
                 <h6 class="product-name"> <?php echo $product->getName()?></h6>
                 <h5 class="product-price"><?php echo $product->getPrice()?></h5>
             </div>
-            <label for="amount"><b>Amount</b></label>
-            <form action= "/add-product" method="post">
+            <form class = increase-form onsubmit="return false" method="post">
                 <div class="input-box">
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
                     <button type="Submit" class="input-box button">+</button>
                 <?php foreach ($userProducts as $userProduct): ?>
                         <?php if ($product->getId() === $userProduct->getProductId()): ?>
-                            <label for="amount"><b><?php echo $userProduct->getByUserIdProductId($this->authService->getCurrentUser()->getId(),$product->getId())->getAmount() ?></b></label>
+                            <label class = "product-quantity"><b><?php echo $userProduct->getByUserIdProductId($this->authService->getCurrentUser()->getId(),$product->getId())->getAmount() ?></b></label>
                         <?php endif; ?>
                 <?php endforeach; ?>
             </form>
-            <form action= "/decrease-product" method="post">
+            <form class = "decrease-product" onsubmit="return false"  method="post">
                 <div class="input-box">
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
                 <button type="Submit" class="input-box button">-</button>
             </form>
-            <form action= "/product" method="post">
+            <form class = "product" action= "/product" onsubmit="return false"  method="post">
                 <div class="input-box">
                     <input type="hidden" placeholder="Enter product id" value="<?php echo $product->getId()?>" name ="product_id" required>
                 </div>
@@ -41,6 +40,61 @@
     <?php endforeach ?>
 </div>
 </html>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    $("document").ready(function () {
+        $('.increase-form').submit(function () {
+            $.ajax({
+                type: "POST",
+                url: "/add-product",
+                data: $(this).serialize(),
+                // dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+// Обновляем количество товаров в бейдже корзины
+                    $('.product-quantity').text(response.amount)
+                },
+            });
+        });
+    });
+</script>
+
+<script>
+    $("document").ready(function () {
+        $('.decrease-product').submit(function () {
+            $.ajax({
+                type: "POST",
+                url: "/decrease-product",
+                data: $(this).serialize(),
+                // dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+// Обновляем количество товаров в бейдже корзины
+                    $('.product-quantity').text(response.amount)
+                },
+            });
+        });
+    });
+</script>
+
+<script>
+    $("document").ready(function () {
+        $('.product').submit(function () {
+            $.ajax({
+                type: "POST",
+                url: "/product",
+                data: $(this).serialize(),
+                // dataType: 'json',
+                success: function () {
+                    console.log('yes');
+                },
+            });
+        });
+    });
+</script>
+
 
 <style>
     .product-grid {

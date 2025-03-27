@@ -30,9 +30,13 @@ class CartController extends BaseController
 //добавить валидацию
             $productId = $request->getProductId();
 
-            $this->cartService->addProduct($productId);
+            $amount = $this->cartService->addProduct($productId);
 
-            header("Location: catalog");
+            $result = [
+                'amount' => $amount
+            ];
+
+            echo json_encode($result);
         }
     }
 
@@ -47,10 +51,13 @@ class CartController extends BaseController
 
             $amount = UserProduct::getByUserIdProductId($userId, $productId)->getAmount();
 
-            $this->cartService->decreaseProduct($productId, $amount);
+            $amount = $this->cartService->decreaseProduct($productId, $amount);
 
-            header("Location: catalog");
+            $result = [
+                'amount' => $amount
+            ];
 
+            echo json_encode($result);
         }
     }
 

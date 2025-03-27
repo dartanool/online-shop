@@ -14,7 +14,7 @@ class CartService
         $this->authService = new AuthSessionService();
     }
 
-    public function addProduct(int $productId) : void
+    public function addProduct(int $productId) : int
     {
         $user = $this->authService->getCurrentUser();
 
@@ -28,9 +28,10 @@ class CartService
             // update
             UserProduct::updateAmountByUserIdProductId($user->getId(), $productId, $amount);
         }
+        return $amount;
     }
 
-    public function decreaseProduct(int $productId,int $amount) : void
+    public function decreaseProduct(int $productId,int $amount) : int
     {
         $user = $this->authService->getCurrentUser();
         $userId = $user->getId();
@@ -41,6 +42,7 @@ class CartService
             $amount = $amount - 1;
             UserProduct::updateAmountByUserIdProductId($userId, $productId, $amount);
         }
+        return $amount;
     }
 
     public function getUserProducts(): array

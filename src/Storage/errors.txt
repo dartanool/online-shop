@@ -125,3 +125,8 @@
 Ошибка: Для формирования заказа сумма заказа должна быть больше 100 рублей
 Файл: /var/www/html/src/Service/OrderService.php
 Строка: 36
+
+Время: 2025-03-26 12:06:09
+Ошибка: Call to a member function getImageUrl() on null
+Файл: /var/www/html/src/Views/product_page.php
+Строка: 11
